@@ -1,0 +1,19 @@
+#parse("/velocity/common_layout.vm")
+#@mainLayout()
+<div class="container col-xl-10 col-xxl-8 px-4 py-5">
+    <div class="row align-items-center g-lg-5 py-5">
+        <div class="col-lg-7 text-center">
+            <ion-icon name="$icon" style="height:20rem; width: 20rem"></ion-icon>
+        </div>
+        <div class="col-md-10 mx-auto col-lg-5">
+            <h1>$code</h1>
+            <p>$message</p>
+            <a href="#" onclick="window.history.back();">Back and try again</a>
+            #if ($stacktrace)
+                <pre>$stacktrace</pre>
+            #end
+
+        </div>
+    </div>
+</div>
+#end

@@ -1,0 +1,16 @@
+<div class="d-inline">
+    #if($currentUser)
+        <span class="text-nowrap">
+            <ion-icon name="person-outline"></ion-icon>
+            $currentUser.login
+        </span>
+        <a class="btn px-3 text-nowrap" href="/logout">Logout</a>
+    #else
+        <a class="btn px-3 text-nowrap" href="/login">
+            Sign in
+        </a>
+        <a class="btn px-3 text-nowrap" href="/registration">
+            Sign up
+        </a>
+    #end
+</div>

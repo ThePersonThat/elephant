@@ -1,0 +1,191 @@
+#wrapper {
+    width: 1000px;
+    margin: 0 auto;
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+}
+
+#header {
+    margin-top: 10px;
+    background: #4F81BD;
+    border-radius: 5px;
+    color: white;
+    font-size: 14px;
+    text-align: center;
+}
+
+#content {
+    text-align: left;
+    margin-top: 10px;
+}
+
+
+h1.title {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+a.logo {
+    text-decoration: none;
+    color: white;
+}
+
+a.logo:active {
+    text-decoration: none
+}
+
+
+p {
+    font-family: monospace;
+    font-size: 12px;
+}
+
+/*
+    ################################################
+        Navigation path
+    ################################################
+*/
+
+#path {
+    color: slategray;
+    margin: 0;
+    padding: 0;
+}
+
+#path a {
+    color: slategray;
+    text-decoration: none;
+}
+
+#path a:hover {
+    text-decoration: underline;
+}
+
+
+/*
+    ################################################
+        Editor
+    ################################################
+*/
+
+#editor {
+    height: 400px;
+
+    border: 1px solid #4F81BD;
+
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+}
+
+
+#DB150_content {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+    font-size: 12px;
+}
+
+div#DB150_spinner {
+    display: none;
+    width: 100px;
+    height: 100px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    background: url(/resources/img/ajax-loader.gif) no-repeat center #fff;
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #666;
+    margin-left: -50px;
+    margin-top: -50px;
+    z-index: 2;
+    overflow: auto;
+}
+
+.datagrid table {
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.datagrid {
+    background: #fff;
+    overflow: hidden;
+    border: 1px solid #4F81BD;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+
+.datagrid table td, .datagrid table th {
+    padding: 2px 2px;
+}
+
+.datagrid table thead th {
+    background: #4F81BD;
+    color: #FFFFFF;
+    padding: 0px 5px 0px 5px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.datagrid table thead th:first-child {
+    border: none;
+}
+
+.datagrid table tbody td {
+    border-left: 1px solid #E1EEF4;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.datagrid table tbody .alt td {
+    background: #E1EEF4;
+}
+
+.datagrid table tbody td:first-child {
+    border-left: none;
+}
+
+.datagrid table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/*
+    ################################################
+        Table list
+    ################################################
+*/
+
+ul.tables,
+ul.tables ul {
+    list-style: none;
+    height: 450px;
+    position: absolute;
+    padding: 0px;
+}
+
+ul.tables ul {
+    display: none; /* initially menu item is hidden */
+    position: absolute; /* absolute positioning is important for menu to float */
+    width: 100%;
+}
+
+
+/*th {*/
+/*text-align: center;*/
+/*}*/
+
+/* Hover effect for menu*/
+ul.tables li {
+    text-align: center;
+    padding: 15px 3px 3px 3px;
+}
+
+/* TODO Test it */
+ul.tables:first-child {
+    padding-top: 0px;
+    margin-top: 0px;
+}

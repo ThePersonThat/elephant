@@ -1,0 +1,43 @@
+#parse("/velocity/common_layout.vm")
+#@mainLayout()
+
+<div class="container col-xl-10 col-xxl-8 px-4 py-5">
+    <div class="row align-items-center g-lg-5 py-5">
+        <div class="col-lg-7 text-center">
+            <img src="/images/hero.svg" style="height:20rem" alt="logotype"/>
+            <h1 class="display-4 lh-1 mb-3 logotype-font">Elephant</h1>
+            <h2 class="fs-4">DaaS<span title="Database as a Service">*</span> just for the testing</h2>
+        </div>
+        <div class="col-md-10 mx-auto col-lg-5">
+            #if ($error)
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    $error
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            #end
+            <form class="p-4 p-md-5 border shadow" action="/registration" method="post">
+                <input name="_csrf" value="$csrf" type="hidden"/>
+                <div class="form-floating mb-3">
+                    <input type="email" name="login" class="form-control" id="floatingInput"
+                           placeholder="name@example.com">
+                    <label for="floatingInput">Email address</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" name="password" class="form-control" id="floatingPassword"
+                           placeholder="Password">
+                    <label for="floatingPassword">Password</label>
+                </div>
+                <div class="checkbox mb-3">
+                    <label>
+                        <input type="checkbox" value="remember-me"> Remember me
+                    </label>
+                </div>
+                <button class="w-100 btn" type="submit">Sign up</button>
+                <hr class="my-4">
+                <small class="text-muted">By clicking Sign up, you agree to the terms of use.</small>
+            </form>
+        </div>
+    </div>
+</div>
+
+#end

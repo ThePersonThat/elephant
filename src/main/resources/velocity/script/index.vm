@@ -1,0 +1,48 @@
+#parse("/velocity/internal_layout.vm")
+#@mainLayout()
+<div class="container">
+
+    <div class="card-list">
+        <div class="card-list-head">
+            <h3>Scripts</h3>
+        </div>
+        <div class="card-list-body card-task">
+
+            #if ($scripts.size() > 0)
+                #foreach ($script in $scripts)
+                    <div class="card-body border mb-1">
+                        <div class="card-title">
+                            <a href="/database/$database/script/">
+                                <h6>
+                                    <ion-icon name="server-outline"></ion-icon>
+                                    $script.filename
+                                </h6>
+                            </a>
+                            <span class="text-small">$script.filename</span>
+                        </div>
+                        <div class="card-meta">
+                            <div class="card-options">
+                                <button class="btn" type="button">test</button>
+                                <button class="btn" type="button">test2</button>
+                            </div>
+                        </div>
+                    </div>
+                #end
+            #else
+                <p>Currently you have no one database</p>
+            #end
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <h3>New scripts</h3>
+    <form action="/database/$database/script/" method="post" class="shadow border">
+        <input name="_csrf" value="$csrf" type="hidden"/>
+        <div class="form-floating mb-3">
+            <input type="file" name="file">
+
+        </div>
+        <button class="w-100 btn" type="submit">Create new backup</button>
+    </form>
+#end

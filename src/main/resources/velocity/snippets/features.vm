@@ -1,0 +1,32 @@
+<div class="container px-4 py-5" id="hanging-icons">
+    <h2 class="pb-2 border-bottom">Why we?</h2>
+    <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+        <div class="col d-flex align-items-start">
+            <div class="icon-square text-dark flex-shrink-0 me-3">
+                <ion-icon name="restaurant-outline" style="height: 5rem;width: 5rem;"></ion-icon>
+            </div>
+            <div>
+                <h2>Crafted for QA</h2>
+                <p>Seed database, test, reset. And do again and again!</p>
+            </div>
+        </div>
+        <div class="col d-flex align-items-start">
+            <div class="icon-square text-dark flex-shrink-0 me-3">
+                <ion-icon name="ribbon-outline" style="height: 5rem;width: 5rem;"></ion-icon>
+            </div>
+            <div>
+                <h2>Free</h2>
+                <p>Brilliant features for free.</p>
+            </div>
+        </div>
+        <div class="col d-flex align-items-start">
+            <div class="icon-square text-dark flex-shrink-0 me-3">
+                <ion-icon name="cog-outline" style="height: 5rem;width: 5rem;"></ion-icon>
+            </div>
+            <div>
+                <h2>API</h2>
+                <p>"Kill all humans" - NO! But we have perfect API fro DB management.</p>
+            </div>
+        </div>
+    </div>
+</div>

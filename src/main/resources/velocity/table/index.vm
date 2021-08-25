@@ -1,0 +1,23 @@
+#parse("/velocity/internal_layout.vm")
+#@mainLayout()
+<style>
+    .system_table {
+        display: none;
+    }
+</style>
+
+<table>
+    <tr>
+        <th>Table name</th>
+    </tr>
+    #foreach ($row in $tables.rows())
+        <tr>
+            #set ($table = $row.getObject("name"))
+            <td class="#if($table.toString().startsWith("pg_") || $table.toString().startsWith(
+                "sql_"))system_table#{else}user_table#end">
+                <a href="/database/$database/table/$table">$table
+            </td>
+        </tr>
+    #end
+</table>
+#end

@@ -1,0 +1,43 @@
+<div class="container">
+    <div class="row">
+        <div class="card">
+            <div class="d-flex card-body">
+                <div class="align-items-center row">
+                    <div class="mb-4 mb-sm-0 col-sm-5">
+                        <h2 class="mb-0 d-flex align-items-center">
+                            <span>$spacePercent%</span><span
+                                class="dot bg-pink d-inline-block ms-3"></span></h2><span
+                            class="text-muted text-uppercase small">Total Space</span>
+                        <hr>
+                        <small class="text-muted">used from total space in your plan</small></div>
+                    <div class="col-sm-7">
+                        <canvas id="spaceChart"
+                                style="display: block; box-sizing: border-box; height: 146px; width: 292px;" width="292"
+                                height="146"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            let spaceChart = document.getElementById("spaceChart");
+            if (spaceChart) {
+                new Chart(spaceChart, {
+                    type: 'doughnut',
+                    data: {
+                        datasets: [
+                            {
+                                label: "Space",
+                                backgroundColor: ["#3e95cd", "White"],
+                                data: [$spacePercent, 100 -$spacePercent]
+                            }
+                        ]
+                    },
+                    options: {
+                        title: {display: false}
+                    }
+                });
+
+            }
+        </script>
+    </div>
+</div>

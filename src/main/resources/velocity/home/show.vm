@@ -1,0 +1,53 @@
+#parse("/velocity/common_layout.vm")
+#@mainLayout()
+    #if ($currentUser.role().toString().equals("UNCHEKED"))
+        #parse("/velocity/home/_no-verified.vm")
+    #else
+        #parse("/velocity/home/_verified.vm")
+    #end
+<div class="container pt-5">
+    <div class="card-list">
+        <div class="card-list-head">
+            <h3>Databases</h3>
+        </div>
+        <div class="card-list-body card-task">
+
+            #if ($bases.size() > 0)
+                #foreach ($base in $bases)
+                    <div class="card-body border mb-1">
+                        <div class="card-title">
+                            <a href="/database/$base.name/table">
+                                <h6>
+                                    <ion-icon name="server-outline"></ion-icon>
+                                    $base.name
+                                </h6>
+                            </a>
+                            <span class="text-small">$base.name</span>
+                        </div>
+                        <div class="card-meta">
+                            <div class="card-options">
+                                <button class="btn" type="button">test</button>
+                                <button class="btn" type="button">test2</button>
+                            </div>
+                        </div>
+                    </div>
+                #end
+            #else
+                <p>Currently you have no one database</p>
+            #end
+        </div>
+    </div>
+    #if($currentUser.role().maxDB() >= $bases.size())
+        <form class="p-4 p-md-5" action="/database" method="post">
+            <input name="_csrf" value="$csrf" type="hidden"/>
+            <button class="w-100 btn" type="submit">Create new database</button>
+        </form>
+    #elseif($currentUser.role().maxDB() == 0)
+        You need to approve you email before can create new DB
+        <button class="w-100 btn disabled" type="submit">Create new database</button>
+    #else
+        You reach you DB limit - delete one or upgrade plan.
+        <button class="w-100 btn disabled" type="submit">Create new database</button>
+    #end
+
+#end

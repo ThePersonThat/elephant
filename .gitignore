@@ -1,0 +1,4 @@
+/target/
+/.idea/
+/elephant.iml
+config.properties

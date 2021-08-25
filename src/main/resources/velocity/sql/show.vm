@@ -1,0 +1,17 @@
+#parse("/velocity/internal_layout.vm")
+#@mainLayout()
+<script>URL = "/database/$database/sql";</script>
+<script src="/js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="/js/db150.js" type="text/javascript" charset="utf-8"></script>
+<script src="/js/jquery.js" type="text/javascript" charset="utf-8"></script>
+<link rel="stylesheet" href="/css/db150.css" type="text/css"/>
+
+<div id="editor">$query</div>
+
+<p><span style="color:red">F8</span> to run current query.</p>
+<p><span style="color:red">Ctrl+Enter</span> to run current query.</p>
+
+
+<div id="DB150_spinner">Loading...</div>
+<div id="DB150_content"/>
+#end

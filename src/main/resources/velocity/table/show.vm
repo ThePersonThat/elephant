@@ -1,0 +1,25 @@
+#parse("/velocity/internal_layout.vm")
+#@mainLayout()
+<h1>$table.name</h1>
+<table class="table">
+    <tr>
+        #foreach ($cel in $table.columns())
+            <th title="$cel.type">$cel.name</th>
+        #end
+    </tr>
+    #foreach ($row in $table.rows())
+        <tr>
+            #foreach ($cel in $table.columns())
+                #set ($current = $row.getObject($cel.name))
+                <td>
+                    #if ($current)
+                        $current
+                    #else
+                        <span class="NULL">NULL</span>
+                    #end
+                </td>
+            #end
+        </tr>
+    #end
+</table>
+#end

@@ -1,0 +1,83 @@
+#macro(mainLayout)
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="csrf-token" content="$csrf">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Kuzikov Borys">
+    <title>Elephant</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Permanent+Marker">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/dashboard.css" rel="stylesheet">
+    <script src="/js/chart.min.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule="" src="https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.js"></script>
+</head>
+<body>
+
+
+<header class="navbar  sticky-top flex-md-nowrap px-5 ">
+    <a class="logotype logotype-font navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">
+        <img src='/images/logo-bw.png' alt="logo">
+        Elephant
+    </a>
+    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    #parse("/velocity/snippets/user.vm")
+</header>
+
+<div class="container-fluid">
+    #if ($info)
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            $error
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    #end
+    #if ($error)
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            $error
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    #end
+    <div class="row">
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <div class="position-sticky pt-5">
+                #parse("/velocity/snippets/db-menu.vm")
+            </div>
+        </nav>
+
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            #if ($breadcrumb)
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">
+                        #foreach($crumb in $breadcrumb)
+                            $crumb
+                            #if($foreach.hasNext)
+                                <ion-icon name="chevron-forward-outline"></ion-icon>
+                            #end
+                        #end
+                    </h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                        </div>
+                    </div>
+                </div>
+            #end
+            $bodyContent
+
+        </main>
+    </div>
+</div>
+
+
+<script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+#end
