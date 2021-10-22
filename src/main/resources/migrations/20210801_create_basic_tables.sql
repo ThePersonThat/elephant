@@ -55,8 +55,8 @@ create table LOGGER
         constraint logger_pk
             primary key,
     ip         varchar(16)             not null,
-    database   varchar(60),
-    "user"     varchar(10)             not null,
+    database   varchar(50),
+    "user"     varchar(50)             not null,
     message    text                    not null,
     created_at timestamp default now() not null
 );

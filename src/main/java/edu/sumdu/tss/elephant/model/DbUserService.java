@@ -1,8 +1,10 @@
 package edu.sumdu.tss.elephant.model;
 
 import edu.sumdu.tss.elephant.helper.DBPool;
-import edu.sumdu.tss.elephant.helper.exception.NotImplementedException;
+import edu.sumdu.tss.elephant.helper.utils.CmdUtil;
 import edu.sumdu.tss.elephant.helper.utils.ParameterizedStringFactory;
+
+import java.io.File;
 
 public class DbUserService {
 
@@ -13,13 +15,13 @@ public class DbUserService {
     public static void initUser(String username, String password) {
         //Create user
         System.out.println("Username: " + username);
-        String create_user_string = CREATE_USER_SQL.addParameter("name", username).addParameter("password", password).toString();
-        System.out.println(create_user_string);
-        DBPool.getConnection().open().createQuery(create_user_string, false).executeUpdate();
+        String createUserString = CREATE_USER_SQL.addParameter("name", username).addParameter("password", password).toString();
+        System.out.println(createUserString);
+        DBPool.getConnection().open().createQuery(createUserString, false).executeUpdate();
         //Create tablespace
-        String path = UserService.tablespacePath(username);
+        String path = UserService.userStoragePath(username);
         System.out.println("Tablespace path:" + path);
-        UserService.createTablespace(username, path);
+        UserService.createTablespace(username, path + File.separator + "tablespace");
 
         //Create database
         //TODO: move to role change
@@ -37,7 +39,10 @@ public class DbUserService {
         try (var context = connection.beginTransaction()) {
             context.createQuery(DELETE_USER_SQL.addParameter("name", name).toString(), false).executeUpdate();
         }
+        //TODO: drop all database
         //Drop tablespace
-        throw new NotImplementedException();
+        String path = UserService.userStoragePath(name);
+        //TODO: create script for removing user profile
+        CmdUtil.exec(String.format("sudo remove-user %s", path));
     }
 }

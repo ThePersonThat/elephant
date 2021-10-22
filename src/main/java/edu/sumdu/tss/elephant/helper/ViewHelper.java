@@ -13,7 +13,8 @@ public class ViewHelper {
 
     public static final String[] FLASH_KEY = {Keys.ERROR_KEY, Keys.INFO_KEY};
 
-    public static void userError(Context ctx, Integer code, String message, String icon, String stacktrace) {
+    public static void userError(final Context ctx, final Integer code,
+                                 final String message, final String icon, final String stacktrace) {
         var model = ViewHelper.defaultVariables(ctx);
         model.put("code", code.toString());
         model.put("message", message);
@@ -61,6 +62,16 @@ public class ViewHelper {
             context.sessionAttribute(Keys.BREADCRUMB_KEY, breadcrumb);
         }
         return breadcrumb;
+    }
+
+    public static String pager(int totalPage, int currentPage) {
+        StringBuilder pager = new StringBuilder(500);
+        pager.append("<ul class=\"pages\">");
+        for (int i = 1; i < totalPage; i++) {
+            pager.append(String.format("<li><a href=\"?offset=\"%i\">%i</li>\n", i, i));
+        }
+        pager.append("</ul>");
+        return pager.toString();
     }
 
 }

@@ -1,14 +1,10 @@
 package edu.sumdu.tss.elephant.helper;
 
-import io.javalin.core.security.Role;
+import io.javalin.core.security.RouteRole;
 import lombok.Getter;
 import org.apache.commons.io.FileUtils;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-public enum UserRole implements Role {
+public enum UserRole implements RouteRole {
     ANYONE(0) {
         public long maxConnections() {
             return 0;
@@ -97,7 +93,8 @@ public enum UserRole implements Role {
     };
 
 
-    public final static Set<Role> AUTHED = new HashSet<>(Arrays.asList(UserRole.UNCHEKED, UserRole.BASIC_USER, UserRole.PROMOTED_USER, UserRole.ADMIN));
+    public final static RouteRole[] AUTHED = {UserRole.UNCHEKED, UserRole.BASIC_USER, UserRole.PROMOTED_USER, UserRole.ADMIN};
+
     @Getter
     private final Long value;
 

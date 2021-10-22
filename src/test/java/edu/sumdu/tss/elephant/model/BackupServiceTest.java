@@ -22,10 +22,10 @@ class BackupServiceTest {
     void perform() {
         String backup = StringUtils.randomAlphaString(10);
         String database = "hvtdgtir";
-        BackupService.perform(database, backup);
+        BackupService.perform(database, database, backup);
         var point = BackupService.byName(database, backup);
         assertTrue(point != null, "new point exist");
-        String path = BackupService.filePath(database, backup);
+        String path = BackupService.filePath(database, database, backup);
         assertTrue(new File(path).exists(), "fileExist");
     }
 
@@ -33,8 +33,8 @@ class BackupServiceTest {
     void restore() {
         String backup = StringUtils.randomAlphaString(10);
         String database = "hvtdgtir";
-        BackupService.perform(database, backup);
-        BackupService.restore(database, backup);
+        BackupService.perform(database, database, backup);
+        BackupService.restore(database, database, backup);
 
     }
 }

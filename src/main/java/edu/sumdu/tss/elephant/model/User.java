@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class User {
+
     private Long id;
     private String login;
     private String password;
@@ -14,6 +15,7 @@ public class User {
     private String privateKey;
     private String publicKey;
     private String token;
+    private String language;
 
     //TODO: crypt it
     public void setPassword(String password) {
@@ -23,4 +25,5 @@ public class User {
     public UserRole role() {
         return UserRole.byValue(role);
     }
+
 }

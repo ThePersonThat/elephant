@@ -8,7 +8,7 @@ import java.security.SignatureException;
 import java.util.Formatter;
 
 public class Hmac {
-    private static final String HMAC_SHA512 = "HmacSHA512";
+    private static final String HMAC_SHA384 = "HmacSHA384";
 
     private static String toHexString(byte[] bytes) {
         Formatter formatter = new Formatter();
@@ -20,8 +20,8 @@ public class Hmac {
 
     public static String calculate(String data, String key)
             throws SignatureException, NoSuchAlgorithmException, InvalidKeyException {
-        SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes(), HMAC_SHA512);
-        Mac mac = Mac.getInstance(HMAC_SHA512);
+        SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes(), HMAC_SHA384);
+        Mac mac = Mac.getInstance(HMAC_SHA384);
         mac.init(secretKeySpec);
         return toHexString(mac.doFinal(data.getBytes()));
     }

@@ -25,7 +25,8 @@
             </div>
             <div>
                 <h2>API</h2>
-                <p>"Kill all humans" - NO! But we have perfect API fro DB management.</p>
+                <p>"Kill all humans" - NO! But we have perfect API fro DB management. See documentation in
+                    <a href="/swagger">Open-API</a> or <a href="/redoc">reDoc</a> format</p>
             </div>
         </div>
     </div>

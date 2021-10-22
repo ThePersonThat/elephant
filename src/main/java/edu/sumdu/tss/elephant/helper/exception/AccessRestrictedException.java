@@ -1,6 +1,9 @@
 package edu.sumdu.tss.elephant.helper.exception;
 
 public class AccessRestrictedException extends HttpError400 {
+    /**
+     *
+     */
     public AccessRestrictedException() {
         super();
     }

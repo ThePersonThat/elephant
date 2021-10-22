@@ -10,11 +10,9 @@ import edu.sumdu.tss.elephant.model.DatabaseService;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
-import java.util.Optional;
-
 public class BackupController extends AbstractController {
 
-    public static final String BASIC_PAGE = "/database/:database/point";
+    public static final String BASIC_PAGE = "/database/{database}/point/";
     private static final ParameterizedStringFactory DEFAULT_CRUMB = new ParameterizedStringFactory("<a href='/database/:database/point'>Backups</a>");
 
     public BackupController(Javalin app) {
@@ -23,20 +21,25 @@ public class BackupController extends AbstractController {
 
     public static void restore(Context context) {
         Backup point = setupPoint(context);
-        BackupService.restore(point.getDatabase(), point.getPoint());
-        context.redirect(BASIC_PAGE);
+        BackupService.restore(currentUser(context).getUsername(), point.getDatabase(), point.getPoint());
+        context.redirect(BASIC_PAGE.replace("{database}", point.getDatabase()));
     }
 
     public static void create(Context context) {
-        Backup point = setupPoint(context);
-        BackupService.perform(point.getDatabase(), point.getPoint());
-        context.redirect(BASIC_PAGE);
+        String dbName = context.pathParam("database");
+        String point = context.formParam("point");
+        if (point == null) {
+            point = context.pathParam("point");
+        }
+        Database database = DatabaseService.activeDatabase(currentUser(context).getUsername(), dbName);
+        BackupService.perform(currentUser(context).getUsername(), database.getName(), point);
+        context.redirect(BASIC_PAGE.replace("{database}", dbName));
     }
 
     public static void delete(Context context) {
         Backup point = setupPoint(context);
-        BackupService.delete(point.getDatabase(), point.getPoint());
-        context.redirect(BASIC_PAGE);
+        BackupService.delete(currentUser(context).getUsername(), point.getDatabase(), point.getPoint());
+        context.redirect(BASIC_PAGE.replace("{database}", point.getDatabase()));
     }
 
     public static void index(Context context) {
@@ -50,16 +53,19 @@ public class BackupController extends AbstractController {
 
     private static Backup setupPoint(Context context) {
         String dbName = context.pathParam("database");
-        String point = Optional.of(context.formParam("point")).orElse(context.pathParam("point"));
+        String point = context.formParam("point");
+        if (point == null) {
+            point = context.pathParam("point");
+        }
         Database database = DatabaseService.activeDatabase(currentUser(context).getUsername(), dbName);
         return BackupService.byName(database.getName(), point);
     }
 
-    void register(Javalin app) {
+    public void register(Javalin app) {
         app.get(BASIC_PAGE, BackupController::index, UserRole.AUTHED);
         app.post(BASIC_PAGE, BackupController::create, UserRole.AUTHED);
-        app.post(BASIC_PAGE + ":point/create", BackupController::create, UserRole.AUTHED);
-        app.post(BASIC_PAGE + ":point/reset", BackupController::restore, UserRole.AUTHED);
-        app.post(BASIC_PAGE + ":point/delete", BackupController::delete, UserRole.AUTHED);
+        app.post(BASIC_PAGE + "{point}/create", BackupController::create, UserRole.AUTHED);
+        app.post(BASIC_PAGE + "{point}/reset", BackupController::restore, UserRole.AUTHED);
+        app.post(BASIC_PAGE + "{point}/delete", BackupController::delete, UserRole.AUTHED);
     }
 }

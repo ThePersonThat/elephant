@@ -16,6 +16,14 @@ public class TableService {
         return DBPool.getConnection(database).open().createQuery(TABLE_LIST_SQL).executeAndFetchTable();
     }
 
+    private static final String TABLE_SIZE_SQL =
+            "SELECT n_live_tup FROM pg_stat_user_tables\n" +
+                    "WHERE /*schemaname*/ relname = :table";
+
+    public static int getTableSize(String database, String table) {
+        return DBPool.getConnection(database).open().createQuery(TABLE_SIZE_SQL).addParameter("table", table).executeScalar(Integer.class);
+    }
+
     public static Table byName(String database, String tableName, int limit, int offset) {
         return
                 DBPool.getConnection(database).open()

@@ -1,5 +1,5 @@
-#parse("/velocity/internal_layout.vm")
-#@mainLayout()
+#parse("/velocity/db_layout.vm")
+#@dbLayout()
 <div class="container">
     <div class="card-list">
         <div class="card-list-head">

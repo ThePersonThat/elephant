@@ -17,8 +17,6 @@ import io.javalin.http.Context;
 
 import javax.mail.MessagingException;
 
-import static io.javalin.core.security.SecurityUtil.roles;
-
 public class RegistrationController extends AbstractController {
 
     public static final String BASIC_PAGE = "/registration";
@@ -39,6 +37,7 @@ public class RegistrationController extends AbstractController {
             newUser.setLogin(context.formParam("login"));
             newUser.setPassword(context.formParam("password"));
             UserService.save(newUser);
+            UserService.initUserStorage(newUser.getUsername());
             context.sessionAttribute("currentUser", newUser);
             DbUserService.initUser(newUser.getUsername(), newUser.getDbPassword());
             System.out.println("Before send mails");
@@ -88,10 +87,10 @@ public class RegistrationController extends AbstractController {
 
 
     public void register(Javalin app) {
-        app.get(BASIC_PAGE + "/confirm/:token", RegistrationController::userConformation, roles(UserRole.ANYONE));
+        app.get(BASIC_PAGE + "/confirm/{token}", RegistrationController::userConformation);
         app.get(BASIC_PAGE + "/resend-confirm/", RegistrationController::resendUserConformation, UserRole.AUTHED);
-        app.get(BASIC_PAGE, RegistrationController::show, roles(UserRole.ANYONE));
-        app.post(BASIC_PAGE, RegistrationController::create, roles(UserRole.ANYONE));
+        app.get(BASIC_PAGE, RegistrationController::show, UserRole.ANYONE);
+        app.post(BASIC_PAGE, RegistrationController::create, UserRole.ANYONE);
     }
 
 

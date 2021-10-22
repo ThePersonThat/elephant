@@ -1,28 +1,55 @@
 package edu.sumdu.tss.elephant;
 
 import edu.sumdu.tss.elephant.controller.*;
+import edu.sumdu.tss.elephant.controller.api.ApiController;
 import edu.sumdu.tss.elephant.helper.Keys;
 import edu.sumdu.tss.elephant.helper.ViewHelper;
 import edu.sumdu.tss.elephant.helper.exception.HttpException;
 import edu.sumdu.tss.elephant.middleware.CSRFFilter;
 import edu.sumdu.tss.elephant.middleware.CustomAccessManager;
 import io.javalin.Javalin;
+import io.javalin.core.util.JavalinLogger;
 import io.javalin.http.Context;
+import io.javalin.http.staticfiles.Location;
+import io.javalin.plugin.openapi.OpenApiOptions;
+import io.javalin.plugin.openapi.OpenApiPlugin;
+import io.javalin.plugin.openapi.ui.ReDocOptions;
+import io.javalin.plugin.openapi.ui.SwaggerOptions;
+import io.swagger.v3.oas.models.info.Info;
 
 import java.io.File;
 
 public class Server {
     private static final boolean enableCors = true;
     private final Javalin app;
+    //TODO: add global logging
 
+    //TODO: Add localization
+    //ResourceBundle.getBundle("localization/messages", new Locale("en"));
     {
+    /* Load stats from GIT
+        try {
+            FileInputStream fis;
+            Properties properties = new Properties();
+            String propFileName = "git.properties";
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
+            properties.load(inputStream);
+            JavalinLogger.info(properties.getProperty("git.commit.id.full"));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    */
         app = Javalin.create(
-                config -> {
-                    config.addStaticFiles("/public");
-                    config.accessManager(CustomAccessManager.accessManager);
-                })
+                        config -> {
+                            config.addStaticFiles("/public", Location.CLASSPATH);
+                            config.accessManager(CustomAccessManager.accessManager);
+                            config.registerPlugin(new OpenApiPlugin(getOpenApiOptions()));
+                        })
                 .before("/", CSRFFilter::check)
                 .before("/", CSRFFilter::generate)
+                .before(context -> {
+                    JavalinLogger.info("[" + context.method() + "] " + context.url());
+                })
                 .before(context -> {
                     context.sessionAttribute(Keys.BREADCRUMB_KEY, null);
                 })
@@ -42,15 +69,14 @@ public class Server {
         new SqlController(app);
     }
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         if (args.length < 1) {
             throw new RuntimeException("File with properties must be specified on startup");
         }
-        System.out.println(args);
         var file = new File(args[0]);
         Keys.loadParams(file);
 
-        new Server().start(Integer.valueOf(Keys.get("APP.PORT")));
+        new Server().start(Integer.parseInt(Keys.get("APP.PORT")));
     }
 
     /**
@@ -58,47 +84,41 @@ public class Server {
      *
      * @param ctx Context that contains the header with access
      */
-    public static void cors(Context ctx) {
+    public static void cors(final Context ctx) {
         ctx.header("Cache-Control", "no-cache, no-store");
         if (enableCors) {
             ctx.header("Access-Control-Allow-Origin", "*");
         }
     }
 
-    public void start(int port) {
+    public void start(final int port) {
         this.app.start(port);
     }
 
-   /*
-    public static void main(String[] args) throws IOException, ParseException, SQLException, ClassNotFoundException {
-        String config = new String(Files.readAllBytes(Paths.get("config.txt")));
-        JSONParser parser = new JSONParser();
-        JSONObject jsonConfig = (JSONObject) parser.parse(config);
-
-        Javalin app = Javalin.create().start(8080);
-
-                    .before("/", CSRFFilter::check)
-                .before("/", CSRFFilter::generate)
-                .routes(() -> {
-                    get("/", ServiceController::show);
-                    post("/", ServiceController::createOrUpdate);
-                    get("*", ServiceController::act);
-                    post("*", ServiceController::act);
-                })
-                .exception(CheckTokenException.class, ViewHelper::noAuth);
-        DBController db = new DBController((String) jsonConfig.get("user"), (String) jsonConfig.get("pass"), (String) jsonConfig.get("url"));
-        System.out.println("Database connect: [OK]");
-
-        Mail mail = new Mail((String) jsonConfig.get("mail"), (String) jsonConfig.get("mail-pass"), (String) jsonConfig.get("from"));
-        System.out.println("SMTP connect: [OK]");
-
-        ActivePing ap = new ActivePing();
-        Timer timer = new Timer();
-
-    }
-*/
-
     public void stop() {
         this.app.stop();
+    }
+
+    private OpenApiOptions getOpenApiOptions() {
+        Info applicationInfo = new Info()
+                .version("1.0")
+                .description("Elephant");
+        return new OpenApiOptions(applicationInfo)
+                .path("/swagger-docs")
+                .ignorePath("/database/*")
+                .ignorePath("/login/*")
+                .ignorePath("/login")
+                .ignorePath("/logout")
+                .ignorePath("/registration")
+                .ignorePath("/registration/*")
+                .ignorePath("/")
+                .ignorePath("/home")
+                .ignorePath("/home/*")
+                .ignorePath("/profile")
+                .ignorePath("/profile/*")
+                .swagger(new SwaggerOptions("/swagger").title("My Swagger Documentation"))
+                .reDoc(new ReDocOptions("/redoc").title("My ReDoc Documentation"))
+                .activateAnnotationScanningFor("edu.sumdu.tss.elephant.controller.api");
+
     }
 }

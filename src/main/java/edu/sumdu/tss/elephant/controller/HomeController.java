@@ -32,7 +32,7 @@ public class HomeController extends AbstractController {
         context.render("/velocity/home/show.vm", model);
     }
 
-    void register(Javalin app) {
+    public void register(Javalin app) {
         app.get("/", HomeController::show, UserRole.AUTHED);
         app.get(BASIC_PAGE, HomeController::show, UserRole.AUTHED);
     }

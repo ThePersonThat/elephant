@@ -1,15 +1,21 @@
-#parse("/velocity/internal_layout.vm")
-#@mainLayout()
-<script>URL = "/database/$database/sql";</script>
+#parse("/velocity/db_layout.vm")
+#@dbLayout()
+<script>QUERY_URL = "/database/$database/sql";</script>
 <script src="/js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
 <script src="/js/db150.js" type="text/javascript" charset="utf-8"></script>
 <script src="/js/jquery.js" type="text/javascript" charset="utf-8"></script>
 <link rel="stylesheet" href="/css/db150.css" type="text/css"/>
 
-<div id="editor">$query</div>
-
-<p><span style="color:red">F8</span> to run current query.</p>
-<p><span style="color:red">Ctrl+Enter</span> to run current query.</p>
+<div id="editor">$!query</div>
+<div class="row m-4">
+    <div class="col col-sm-1">
+        <button class="btn" onclick="runAll()">Run</button>
+    </div>
+    <div class="col ">
+        <span style="color:red">F8</span> to run current query.<br/>
+        <span style="color:red">Ctrl+Enter</span> to run all query.
+    </div>
+</div>
 
 
 <div id="DB150_spinner">Loading...</div>

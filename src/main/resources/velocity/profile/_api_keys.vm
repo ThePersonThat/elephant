@@ -1,0 +1,25 @@
+<h3>API's keys</h3>
+
+<form action="/profile/reset-api" method="post">
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label for="public-api">Public Api Key</label>
+                <input type="text" readonly class="form-control" id="public-api" aria-describedby="public-api-help"
+                       value="$currentUser.publicKey">
+                <small id="public-api-help" class="form-text text-muted">Public key for...</small>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label for="private-api">Private Api Key</label>
+                <input type="text" readonly class="form-control" id="private-api" aria-describedby="private-api-help"
+                       value="$currentUser.privateKey">
+                <small id="private-api-help" class="form-text text-muted">Private key for...</small>
+            </div>
+        </div>
+    </div>
+    <div class="">
+        <button class="btn" type="submit">Re-generate</button>
+    </div>
+</form>

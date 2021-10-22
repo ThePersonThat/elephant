@@ -38,8 +38,8 @@ public class DatabaseController extends AbstractController {
     }
 
     @Override
-    void register(Javalin app) {
-        app.get(BASIC_PAGE + ":database", DatabaseController::show, UserRole.AUTHED);
+    public void register(Javalin app) {
+        app.get(BASIC_PAGE + "{database}", DatabaseController::show, UserRole.AUTHED);
         app.post(BASIC_PAGE, DatabaseController::create, UserRole.AUTHED);
     }
 

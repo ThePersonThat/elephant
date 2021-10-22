@@ -1,5 +1,5 @@
-#parse("/velocity/common_layout.vm")
-#@mainLayout()
+#parse("/velocity/home_layout.vm")
+#@homeLayout()
     #if ($currentUser.role().toString().equals("UNCHEKED"))
         #parse("/velocity/home/_no-verified.vm")
     #else
@@ -16,13 +16,13 @@
                 #foreach ($base in $bases)
                     <div class="card-body border mb-1">
                         <div class="card-title">
-                            <a href="/database/$base.name/table">
+                            <a href="/database/$base.name">
                                 <h6>
                                     <ion-icon name="server-outline"></ion-icon>
                                     $base.name
                                 </h6>
                             </a>
-                            <span class="text-small">$base.name</span>
+                            <span class="text-small">jdbc:postgresql://Keys.get("APP.URL"):$PORT/$base.name?user=$currentUser.username&password=$currentUser.dbPassword&ssl=true";</span>
                         </div>
                         <div class="card-meta">
                             <div class="card-options">

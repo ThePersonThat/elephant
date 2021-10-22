@@ -9,12 +9,7 @@
             <h2 class="fs-4">DaaS<span title="Database as a Service">*</span> just for the testing</h2>
         </div>
         <div class="col-md-10 mx-auto col-lg-5">
-            #if ($error)
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    $error
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            #end
+            #parse("/velocity/snippets/_notice.vm")
             <form class="p-4 p-md-5 border shadow" action="login" method="post">
                 <input name="_csrf" value="$csrf" type="hidden"/>
                 <div class="form-floating mb-3">
@@ -35,6 +30,7 @@
                 <button class="w-100 btn" type="submit">Sign in</button>
                 <hr class="my-4">
                 <small class="text-muted">By clicking Sign in, you agree to the terms of use.</small>
+                <p><a href="/login/reset-password">Forgot password?</a></p>
             </form>
         </div>
     </div>

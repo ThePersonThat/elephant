@@ -1,7 +1,6 @@
 package edu.sumdu.tss.elephant.model;
 
 import edu.sumdu.tss.elephant.helper.DBPool;
-import edu.sumdu.tss.elephant.helper.Keys;
 import edu.sumdu.tss.elephant.helper.exception.BackupException;
 import edu.sumdu.tss.elephant.helper.exception.HttpError500;
 import edu.sumdu.tss.elephant.helper.exception.NotFoundException;
@@ -38,17 +37,17 @@ public class BackupService {
         try (Connection con = DBPool.getConnection().open()) {
             Backup backup = con.createQuery(GET_BY_NAME_SQL).addParameter("database", database).addParameter("point", point).executeAndFetchFirst(Backup.class);
             if (backup == null) {
-                throw new NotFoundException(String.format("Backup %s for database %s", point, database));
+                throw new NotFoundException("Point not found");
             }
             return backup;
         }
     }
 
-    public static void perform(String database, String pointName) throws BackupException {
+    public static void perform(String owner, String database, String pointName) throws BackupException {
         try (Connection con = DBPool.getConnection().open()) {
             Backup point;
             try {
-                point = con.createQuery(GET_BY_NAME_SQL).addParameter("database", database).addParameter("point", pointName).executeAndFetchFirst(Backup.class);
+                point = byName(database, pointName);
             } catch (NotFoundException ex) {
                 point = new Backup();
                 point.setDatabase(database);
@@ -56,11 +55,11 @@ public class BackupService {
                 point.setCreatedAt(new Date());
             }
             point.setUpdatedAt(new Date());
-            point.setStatus(Backup.BACKUP_STATE.PERFORMED.name());
+            point.setStatus(Backup.BackupState.PERFORMED.name());
             BackupService.save(point);
-            BackupService.createBackup(database, pointName);
+            BackupService.createBackup(owner, database, pointName);
             point.setUpdatedAt(new Date());
-            point.setStatus(Backup.BACKUP_STATE.DONE.name());
+            point.setStatus(Backup.BackupState.DONE.name());
             BackupService.save(point);
         } catch (Sql2oException ex) {
             throw new BackupException(ex);
@@ -73,9 +72,12 @@ public class BackupService {
         }
     }
 
-    static public void restore(String dbName, String pointName) throws BackupException {
+    static public void restore(String owner, String dbName, String pointName) throws BackupException {
         try (Connection con = DBPool.getConnection().open()) {
-            Backup point = con.createQuery(GET_BY_NAME_SQL).addParameter("database", dbName).addParameter("point", pointName).executeAndFetchFirst(Backup.class);
+            Backup point = con.createQuery(GET_BY_NAME_SQL)
+                    .addParameter("database", dbName)
+                    .addParameter("point", pointName)
+                    .executeAndFetchFirst(Backup.class);
             if (point == null) {
                 point = new Backup();
                 point.setDatabase(dbName);
@@ -83,42 +85,47 @@ public class BackupService {
                 point.setCreatedAt(new Date());
             }
             point.setUpdatedAt(new Date());
-            point.setStatus(Backup.BACKUP_STATE.PERFORMED.name());
+            point.setStatus(Backup.BackupState.PERFORMED.name());
             BackupService.save(point);
-            BackupService.restoreBackup(dbName, pointName);
+            BackupService.restoreBackup(owner, dbName, pointName);
             point.setUpdatedAt(new Date());
-            point.setStatus(Backup.BACKUP_STATE.DONE.name());
+            point.setStatus(Backup.BackupState.DONE.name());
             BackupService.save(point);
         } catch (Sql2oException ex) {
             throw new BackupException(ex);
         }
     }
 
-    public static void delete(String database, String point) {
-        String path = filePath(database, point);
-        DBPool.getConnection().open().createQuery(DELETE_BACKUP, false).addParameter("database", database).addParameter("point", point).executeUpdate();
+    public static void delete(String owner, String database, String point) {
+        String path = filePath(owner, database, point);
+        DBPool.getConnection().open().createQuery(DELETE_BACKUP, false)
+                .addParameter("database", database)
+                .addParameter("point", point)
+                .executeUpdate();
         new File(path).delete();
     }
 
-    private static void createBackup(String dbName, String pointName) {
-        String path = filePath(dbName, pointName);
+    private static void createBackup(String owner, String database, String pointName) {
+        String path = filePath(owner, database, pointName);
         try {
             FileUtils.forceMkdirParent(new File(path));
         } catch (Exception ex) {
             throw new HttpError500(ex);
         }
-        CmdUtil.exec(String.format("pg_dump --format=custom --dbname=%s  -f %s", DBPool.dbUtilUrl(dbName), path));
+        CmdUtil.exec(String.format("pg_dump --format=custom --dbname=%s  -f %s", DBPool.dbUtilUrl(database), path));
     }
 
-    private static void restoreBackup(String dbName, String pointName) {
-        String path = filePath(dbName, pointName);
-        DBPool.getConnection().open().createQuery(DROP_DB.addParameter("database", dbName).toString(), false).executeUpdate();
+    private static void restoreBackup(String owner, String database, String pointName) {
+        String path = filePath(owner, database, pointName);
+        DBPool.getConnection().open().createQuery(DROP_DB.addParameter("database", database).toString(), false).executeUpdate();
         CmdUtil.exec(String.format("pg_restore --clean --create --dbname=%s %s", DBPool.dbUtilUrl(DBPool.DEFAULT_DATABASE), path));
     }
 
-    public static String filePath(String dbName, String pointName) {
-        String path = Keys.get("DB.USER_LOCAL_PATH");
-        path = path + File.separatorChar + dbName + File.separatorChar + pointName;
+    public static String filePath(String owner, String database, String pointName) {
+        String path = UserService.userStoragePath(owner) +
+                File.separator + "backups" +
+                File.separator + database +
+                File.separator + pointName;
         return path;
     }
 }

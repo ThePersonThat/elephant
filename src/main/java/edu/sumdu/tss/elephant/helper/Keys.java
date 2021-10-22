@@ -12,7 +12,7 @@ public class Keys {
     public static final String ERROR_KEY = "error";
     public static final String INFO_KEY = "info";
     public static final String[] PARAMS = {
-            "DB.LOCAL_PATH", "DB.PORT", "DB.URL", "DB.NAME", "DB.USERNAME",
+            "DB.LOCAL_PATH", "DB.PORT", "DB.URL", "DB.NAME", "DB.USERNAME", "DB.OS_USER",
             "APP.URL", "APP.PORT",
             "EMAIL.HOST", "EMAIL.PORT", "EMAIL.USER", "EMAIL.FROM"
     };

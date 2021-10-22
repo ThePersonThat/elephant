@@ -1,7 +1,10 @@
 package edu.sumdu.tss.elephant.controller;
 
 import edu.sumdu.tss.elephant.helper.UserRole;
-import edu.sumdu.tss.elephant.helper.exception.NotImplementedException;
+import edu.sumdu.tss.elephant.helper.ViewHelper;
+import edu.sumdu.tss.elephant.model.DbUserService;
+import edu.sumdu.tss.elephant.model.User;
+import edu.sumdu.tss.elephant.model.UserService;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -13,28 +16,76 @@ public class ProfileController extends AbstractController {
         super(app);
     }
 
-    public static void show(Context ctx) {
-        throw new NotImplementedException();
+    public static void show(Context context) {
+        var model = ViewHelper.defaultVariables(context);
+        context.render("/velocity/profile/show.vm", model);
     }
 
-    public static void update(Context ctr) {
-        throw new NotImplementedException();
+    public static void resetPassword(Context context) {
+        var model = ViewHelper.defaultVariables(context);
+        User user = currentUser(context);
+        //TODO add password validation
+        String newPassword = context.formParam("password");
+        user.setPassword(newPassword);
+        UserService.save(user);
+        context.redirect(BASIC_PAGE);
     }
 
-    public static void resetKeys(Context ctr) {
-        throw new NotImplementedException();
+    public static void language(Context context) {
+        var model = ViewHelper.defaultVariables(context);
+        User user = currentUser(context);
+        //TODO add lang validation
+        user.setLanguage(context.queryParam("lang"));
+        UserService.save(user);
+        context.redirect(BASIC_PAGE);
     }
 
-    public static void edit(Context ctr) {
-        throw new NotImplementedException();
+    private static void resetDbPassword(Context context) {
+        var model = ViewHelper.defaultVariables(context);
+        User user = currentUser(context);
+        //TODO add password validation
+        user.setDbPassword(context.formParam("db-password"));
+        UserService.save(user);
+        DbUserService.dbUserPasswordReset(user.getUsername(), user.getDbPassword());
+        context.redirect(BASIC_PAGE);
     }
 
-    void register(Javalin app) {
-        app.post(BASIC_PAGE, ProfileController::update, UserRole.AUTHED);
-        app.get(BASIC_PAGE + "/edit", ProfileController::edit, UserRole.AUTHED);
-        app.get(BASIC_PAGE + "/resetKeys", ProfileController::resetKeys, UserRole.AUTHED);
+    private static void resetWebPassword(Context context) {
+        var model = ViewHelper.defaultVariables(context);
+        User user = currentUser(context);
+        //TODO add password validation
+        user.setPassword(context.formParam("web-password"));
+        UserService.save(user);
+        context.redirect(BASIC_PAGE);
+    }
+
+
+    private static void upgradeUser(Context context) {
+        var model = ViewHelper.defaultVariables(context);
+        User user = currentUser(context);
+        user.setRole(UserRole.valueOf(context.formParam("role")).getValue());
+        UserService.save(user);
+        context.redirect(BASIC_PAGE);
+    }
+
+    private static void removeSelf(Context context) {
+        var model = ViewHelper.defaultVariables(context);
+        User user = currentUser(context);
+        DbUserService.dropUser(user.getUsername());
+        //TODO: delete all user-specific files
+        //TODO: logout
+        //TODO: remove web-user from DB
+        context.redirect("/");
+    }
+
+    public void register(Javalin app) {
+        app.get(BASIC_PAGE + "/lang", ProfileController::language, UserRole.AUTHED);
+        app.post(BASIC_PAGE + "/reset-password", ProfileController::resetPassword, UserRole.AUTHED);
+        app.post(BASIC_PAGE + "/reset-db", ProfileController::resetDbPassword, UserRole.AUTHED);
+        app.post(BASIC_PAGE + "/reset-api", ProfileController::resetWebPassword, UserRole.AUTHED);
+        app.post(BASIC_PAGE + "/upgrade", ProfileController::upgradeUser, UserRole.AUTHED);
+        app.post(BASIC_PAGE + "/remove-self", ProfileController::removeSelf, UserRole.AUTHED);
         app.get(BASIC_PAGE, ProfileController::show, UserRole.AUTHED);
-
     }
 
 }

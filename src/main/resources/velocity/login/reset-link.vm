@@ -1,0 +1,29 @@
+#parse("/velocity/common_layout.vm")
+#@mainLayout()
+<div class="row d-flex justify-content-center flex-nowrap">
+    <div class="row">
+        <div class="col-md-10 mx-auto col-lg-5 border shadow p-5">
+            #parse("/velocity/snippets/_notice.vm")
+            <form action="/login/reset-password" method="post">
+                <input type="hidden" name="token" value="$token">
+                <input type="hidden" name="csrf" value="$csrf">
+                <h3>Identify yourself</h3>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="web-enail">Your email</label>
+                            <input type="text" class="form-control" id="web-email" name="email"
+                                   aria-describedby="web-email-help">
+                            <small id="web-email-help" class="form-text text-muted">Email (username) of your
+                                user</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <button class="btn" type="submit">Send link for password recovery</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+#end

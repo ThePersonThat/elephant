@@ -4,11 +4,11 @@ function runQuery(query, clearResults) {
     if (!query)
         return;
     $.ajax({
-      url: URL,
-      data: { query: query },
-      async: false,
-      cache: false,
-      method:"post"
+        url: QUERY_URL,
+        data: {query: query},
+        async: false,
+        cache: false,
+        method: "post"
     })
       .done(function( html ) {
          var content = $( "#DB150_content" );
@@ -104,7 +104,7 @@ function showProgress() {
         $("div#DB150_spinner").fadeIn("fast");
         spinnerVisible = true;
     }
-};
+}
 function hideProgress() {
     if (spinnerVisible) {
         var spinner = $("div#DB150_spinner");
@@ -112,4 +112,4 @@ function hideProgress() {
         spinner.fadeOut("fast");
         spinnerVisible = false;
     }
-};
+}

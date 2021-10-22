@@ -14,10 +14,10 @@ public class LogService {
             User user = context.sessionAttribute(Keys.SESSION_CURRENT_USER_KEY);
             con.createQuery(INSERT_LOG_SQL)
                     .addParameter("database", database)
-                    .addParameter("messsage", message)
+                    .addParameter("message", message)
                     .addParameter("user", (user != null) ? user.getLogin() : "Undefined")
                     .addParameter("ip", context.ip())
-                    .executeAndFetch(Log.class);
+                    .executeUpdate();
         }
     }
 }

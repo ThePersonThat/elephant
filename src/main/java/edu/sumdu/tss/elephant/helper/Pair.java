@@ -11,4 +11,12 @@ public class Pair<T1, T2> {
         this.key = key;
         this.value = value;
     }
+
+    public T1 getKey() {
+        return key;
+    }
+
+    public T2 getValue() {
+        return value;
+    }
 }

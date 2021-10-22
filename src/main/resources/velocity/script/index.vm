@@ -1,5 +1,5 @@
-#parse("/velocity/internal_layout.vm")
-#@mainLayout()
+#parse("/velocity/db_layout.vm")
+#@dbLayout()
 <div class="container">
 
     <div class="card-list">
@@ -12,7 +12,7 @@
                 #foreach ($script in $scripts)
                     <div class="card-body border mb-1">
                         <div class="card-title">
-                            <a href="/database/$database/script/">
+                            <a href="/database/$database/script/$script.id">
                                 <h6>
                                     <ion-icon name="server-outline"></ion-icon>
                                     $script.filename
@@ -22,14 +22,23 @@
                         </div>
                         <div class="card-meta">
                             <div class="card-options">
-                                <button class="btn" type="button">test</button>
-                                <button class="btn" type="button">test2</button>
+                                <form method="post" action="/database/$database/script/$script.id" class="d-inline">
+                                    <button class="btn" type="submit">
+                                        <ion-icon name="play"></ion-icon>
+                                    </button>
+                                </form>
+                                <form method="post" action="/database/$database/script/$script.id/delete"
+                                      class="d-inline">
+                                    <button class="btn" type="submit">
+                                        <ion-icon name="trash"></ion-icon>
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
                 #end
             #else
-                <p>Currently you have no one database</p>
+                <p>Currently you have no one script</p>
             #end
         </div>
     </div>
@@ -37,12 +46,13 @@
 
 <div class="container">
     <h3>New scripts</h3>
-    <form action="/database/$database/script/" method="post" class="shadow border">
+    <form action="/database/$database/script/" method="post" class="shadow border" enctype="multipart/form-data">
         <input name="_csrf" value="$csrf" type="hidden"/>
         <div class="form-floating mb-3">
             <input type="file" name="file">
 
         </div>
-        <button class="w-100 btn" type="submit">Create new backup</button>
+        <button class="w-100 btn" type="submit">Upload new script</button>
     </form>
+</div>
 #end

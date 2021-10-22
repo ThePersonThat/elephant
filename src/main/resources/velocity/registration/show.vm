@@ -9,23 +9,23 @@
             <h2 class="fs-4">DaaS<span title="Database as a Service">*</span> just for the testing</h2>
         </div>
         <div class="col-md-10 mx-auto col-lg-5">
-            #if ($error)
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    $error
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            #end
+            #parse("/velocity/snippets/_notice.vm")
             <form class="p-4 p-md-5 border shadow" action="/registration" method="post">
                 <input name="_csrf" value="$csrf" type="hidden"/>
                 <div class="form-floating mb-3">
-                    <input type="email" name="login" class="form-control" id="floatingInput"
+                    <input type="email" name="login" class="form-control" id="email"
                            placeholder="name@example.com">
-                    <label for="floatingInput">Email address</label>
+                    <label for="email">Email address</label>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="password" name="password" class="form-control" id="floatingPassword"
+                    <input type="password" name="password" class="form-control" id="password"
                            placeholder="Password">
-                    <label for="floatingPassword">Password</label>
+                    <label for="password">Password</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" name="conformation" class="form-control" id="conformation"
+                           placeholder="Password">
+                    <label for="conformation">Password conformation</label>
                 </div>
                 <div class="checkbox mb-3">
                     <label>
@@ -40,4 +40,22 @@
     </div>
 </div>
 
+<script>
+    let password = document.getElementById('password');
+    let repeat = document.getElementById('conformation');
+    repeat.addEventListener('focus', validateConformation);
+    repeat.addEventListener('input', validateConformation);
+
+    function validateConformation(
+
+    'validateConformation'
+    )
+    {
+        if (p1.value != p2.value || p1.value == '' || p2.value == '') {
+            p2.setCustomValidity('Conformation must be same as password');
+        } else {
+            p2.setCustomValidity('');
+        }
+    }
+</script>
 #end

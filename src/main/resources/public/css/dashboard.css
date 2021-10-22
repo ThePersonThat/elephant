@@ -169,3 +169,10 @@ btn.disabled {
 .navbar {
     background: white;
 }
+
+.block {
+    padding: 20px;
+    background-color: #f9f9f9;
+    color: #273239;
+    font-size: 12pt;
+}

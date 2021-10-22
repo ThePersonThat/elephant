@@ -1,0 +1,38 @@
+#parse("/velocity/common_layout.vm")
+#@mainLayout()
+<div class="row d-flex justify-content-center flex-nowrap">
+    <div class="row">
+        <div class="col-md-10 mx-auto col-lg-5 border shadow p-5">
+            #parse("/velocity/snippets/_notice.vm")
+            <form action="/login/reset" method="post">
+                <input type="hidden" name="token" value="$token">
+                <input type="hidden" name="csrf" value="$csrf">
+                <h3>Chouse new password</h3>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="web-password">Password</label>
+                            <input type="text" class="form-control" id="web-password" name="password"
+                                   aria-describedby="web-password-help">
+                            <small id="web-password-help" class="form-text text-muted">Password for web user</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="web-password-c">Password conformation</label>
+                            <input type="text" class="form-control" id="web-password-c"
+                                   aria-describedby="web-password-c-help">
+                            <small id="web-password-c-help" class="form-text text-muted">Repeat same password</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <button class="btn" type="submit">Change password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+#end

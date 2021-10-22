@@ -1,4 +1,4 @@
-#macro(mainLayout)
+#macro(homeLayout)
 <!doctype html>
 <html lang="en">
 <head>
@@ -32,28 +32,16 @@
     </button>
     #parse("/velocity/snippets/user.vm")
 </header>
-
 <div class="container-fluid">
-    #if ($info)
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            $error
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    #end
-    #if ($error)
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            $error
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    #end
     <div class="row">
         <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
             <div class="position-sticky pt-5">
-                #parse("/velocity/snippets/db-menu.vm")
+                #parse("/velocity/snippets/home-menu.vm")
             </div>
         </nav>
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            #parse("/velocity/snippets/_notice.vm")
             #if ($breadcrumb)
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2">
@@ -70,7 +58,7 @@
                     </div>
                 </div>
             #end
-            $bodyContent
+            $!bodyContent
 
         </main>
     </div>
@@ -81,3 +69,8 @@
 </body>
 </html>
 #end
+
+
+
+
+

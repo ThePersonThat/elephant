@@ -1,0 +1,18 @@
+#parse("/velocity/db_layout.vm")
+#@dbLayout()
+<div class="row">
+    <table>
+        <tr>
+            <th>Statement</th>
+            <th>Result</th>
+        </tr>
+        #foreach ($row in $executeResults)
+            <tr>
+                <td>$row.key</td>
+                <td>$row.value</td>
+            </tr>
+        #end
+    </table>
+</div>
+
+#end

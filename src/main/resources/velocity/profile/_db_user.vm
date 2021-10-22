@@ -1,0 +1,24 @@
+<h3>Database user</h3>
+<form action="/profile/reset-db" method="post">
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label for="db-username">Username</label>
+                <input type="text" readonly class="form-control" id="db-username" aria-describedby="db-username-help"
+                       value="$currentUser.username">
+                <small id="db-username-help" class="form-text text-muted">Database username</small>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label for="db-password">Password</label>
+                <input type="text" class="form-control" id="db-password" aria-describedby="db-password-help"
+                       value="$currentUser.dbPassword">
+                <small id="db-password-help" class="form-text text-muted">Database password</small>
+            </div>
+        </div>
+    </div>
+    <div class="">
+        <button class="btn" type="submit">Change password</button>
+    </div>
+</form>

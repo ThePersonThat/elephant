@@ -1,3 +1,8 @@
+pre.code {
+    margin-top: 1rem;
+    color: brown;
+}
+
 #wrapper {
     width: 1000px;
     margin: 0 auto;

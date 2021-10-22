@@ -63,12 +63,12 @@ public class MailService {
         if (lang == Lang.UA) {
             message.setSubject("Elephant: Відновлення паролю");
             message.setText(String.format(
-                    "Ваше посилання для відновлення паролю,  %s/login/renew/%s" +
+                    "Ваше посилання для відновлення паролю,  %s/login/reset?token=%s" +
                             " (Якщо ви не надсилали запит проігноруйте це повідомлення)", Keys.get("APP.URL"), token));
         } else {
             message.setSubject("Elephant: Reset password");
             message.setText(String.format(
-                    "Hello you reset link ,  %s/login/renew/%s" +
+                    "Hello you reset link ,  %s/login/reset?token=%s" +
                             " (if you did not reset you password then just ignore this message)", Keys.get("APP.URL"), token));
         }
         Transport.send(message);

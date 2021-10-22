@@ -15,5 +15,5 @@ public class Backup {
     private Date updatedAt;
     private String status;
 
-    public enum BACKUP_STATE {PERFORMED, DONE, RESTORE}
+    public enum BackupState {PERFORMED, DONE, RESTORE}
 }
