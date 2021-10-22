@@ -22,4 +22,14 @@ public class StringUtils {
         return UUID.randomUUID().toString();
     }
 
+
+    public static String replaceLast(String texto, String substituir, String substituto) {
+        int pos = texto.lastIndexOf(substituir);
+        if (pos > -1) {
+            return texto.substring(0, pos)
+                    + substituto
+                    + texto.substring(pos + substituir.length());
+        } else
+            return texto;
+    }
 }

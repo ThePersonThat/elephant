@@ -1,0 +1,10 @@
+controls:
+  buttons:
+    ok: ok
+    cancel: cancel
+login:
+  SignIn: Увійти
+regisgter:
+  messages2: text
+mail:
+  conformation: "Elephant: Вітаємо з приєднанням!"

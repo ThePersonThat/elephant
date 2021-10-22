@@ -16,6 +16,7 @@ import io.javalin.Javalin;
 import io.javalin.http.Context;
 
 import javax.mail.MessagingException;
+import java.util.Optional;
 
 public class RegistrationController extends AbstractController {
 
@@ -33,15 +34,17 @@ public class RegistrationController extends AbstractController {
     public static void create(Context context) {
         System.out.println("Start registration");
         try {
+            String lang = (String) Optional.ofNullable(context.sessionAttribute(Keys.LANG_KEY)).orElse(Keys.get("DEFAULT_LANG"));
             User newUser = UserService.newDefaultUser();
             newUser.setLogin(context.formParam("login"));
             newUser.setPassword(context.formParam("password"));
+            newUser.setLanguage(lang);
             UserService.save(newUser);
             UserService.initUserStorage(newUser.getUsername());
             context.sessionAttribute("currentUser", newUser);
             DbUserService.initUser(newUser.getUsername(), newUser.getDbPassword());
             System.out.println("Before send mails");
-            MailService.sendActivationLink(newUser.getToken(), newUser.getLogin(), Lang.EN);
+            MailService.sendActivationLink(newUser.getToken(), newUser.getLogin(), Lang.byValue(lang));
             System.out.println("After Send mail");
         } catch (Exception ex) {
             System.out.println(ex.getMessage());

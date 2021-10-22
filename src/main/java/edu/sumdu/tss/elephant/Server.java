@@ -22,10 +22,7 @@ import java.io.File;
 public class Server {
     private static final boolean enableCors = true;
     private final Javalin app;
-    //TODO: add global logging
 
-    //TODO: Add localization
-    //ResourceBundle.getBundle("localization/messages", new Locale("en"));
     {
     /* Load stats from GIT
         try {

@@ -11,10 +11,13 @@ import java.util.Properties;
 public class Keys {
     public static final String ERROR_KEY = "error";
     public static final String INFO_KEY = "info";
+    public static final String LANG_KEY = "lang";
+
     public static final String[] PARAMS = {
             "DB.LOCAL_PATH", "DB.PORT", "DB.URL", "DB.NAME", "DB.USERNAME", "DB.OS_USER",
             "APP.URL", "APP.PORT",
-            "EMAIL.HOST", "EMAIL.PORT", "EMAIL.USER", "EMAIL.FROM"
+            "EMAIL.HOST", "EMAIL.PORT", "EMAIL.USER", "EMAIL.FROM",
+            "DEFAULT_LANG"
     };
     public static final String[] SECURED_PARAMS = {"DB.PASSWORD", "EMAIL.PASSWORD"};
     public static final String SESSION_CURRENT_USER_KEY = "currentUser";
@@ -56,13 +59,11 @@ public class Keys {
         if (keys == null) {
             throw new RuntimeException("Add path to config.property to your application on init");
         }
-/*
-        if (!keys.keySet().contains(key)) {
-            throw new RuntimeException(String.format("Unknow key %s in app properties", key));
+
+        if (!keys.containsKey(key)) {
+            throw new RuntimeException(String.format("Unknown key %s in app properties", key));
         }
 
-        return keys.get(key);
-*/
         String value = keys.get(key);
         if (!keys.containsKey(key)) {
             throw new RuntimeException(String.format("No value for key %s", key));

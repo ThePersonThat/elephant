@@ -8,6 +8,11 @@
         </span>
         <a class="btn px-3 text-nowrap" href="/logout">Logout</a>
     #else
+        #if ($lang.equals("EN"))
+            <a class="btn px-3 text-nowrap" href="/login/lang/ua">🇺🇦</a>
+        #else
+            <a class="btn px-3 text-nowrap" href="/login/lang/en">🇬🇧</a>
+        #end
         <a class="btn px-3 text-nowrap" href="/login">
             Sign in
         </a>

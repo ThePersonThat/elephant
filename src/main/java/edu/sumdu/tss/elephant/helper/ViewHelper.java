@@ -2,6 +2,8 @@ package edu.sumdu.tss.elephant.helper;
 
 import edu.sumdu.tss.elephant.helper.exception.HttpException;
 import edu.sumdu.tss.elephant.helper.utils.ExceptionUtils;
+import edu.sumdu.tss.elephant.helper.utils.MessageBundle;
+import edu.sumdu.tss.elephant.model.User;
 import io.javalin.http.Context;
 
 import java.util.ArrayList;
@@ -32,7 +34,11 @@ public class ViewHelper {
     public static Map<String, Object> defaultVariables(final Context context) {
         Map<String, Object> model = new HashMap<>();
         model.put("csrf", context.sessionAttribute("csrf"));
-        model.put("currentUser", context.sessionAttribute(Keys.SESSION_CURRENT_USER_KEY));
+        User user = context.sessionAttribute(Keys.SESSION_CURRENT_USER_KEY);
+        model.put("currentUser", user);
+        String lang = user == null ? context.sessionAttribute(Keys.LANG_KEY) : user.getLanguage();
+        model.put("msg", new MessageBundle(lang));
+        model.put(Keys.LANG_KEY, lang);
         var crumbs = breadcrumb(context);
         model.put(Keys.BREADCRUMB_KEY, crumbs);
 

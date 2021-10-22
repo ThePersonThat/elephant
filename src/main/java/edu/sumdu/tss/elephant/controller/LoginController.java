@@ -17,6 +17,7 @@ import io.javalin.http.Context;
 import javax.mail.MessagingException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class LoginController extends AbstractController {
 
@@ -98,6 +99,20 @@ public class LoginController extends AbstractController {
         context.redirect(BASIC_PAGE);
     }
 
+    public static void lang(Context context) {
+        String lang = null;
+        try {
+            lang = Lang.byValue(context.pathParam("lang")).toString();
+        } catch (RuntimeException ex) {
+            context.sessionAttribute(Keys.ERROR_KEY, ex.getMessage());
+            ex.printStackTrace();
+        }
+        JavalinLogger.info(lang);
+
+        context.sessionAttribute(Keys.LANG_KEY, lang != null ? lang : Keys.get("DEFAULT_LANG"));
+        context.redirect(Optional.ofNullable(context.header("Referer")).orElse("/"));
+    }
+
     public void register(Javalin app) {
         app.get(BASIC_PAGE, LoginController::show, UserRole.ANYONE);
         app.post(BASIC_PAGE, LoginController::create, UserRole.ANYONE);
@@ -105,6 +120,7 @@ public class LoginController extends AbstractController {
         app.post(BASIC_PAGE + "/reset-password", LoginController::resetLink, UserRole.ANYONE);
         app.get(BASIC_PAGE + "/reset", LoginController::resetPassword, UserRole.ANYONE);
         app.post(BASIC_PAGE + "/reset", LoginController::resetPassword, UserRole.ANYONE);
+        app.get(BASIC_PAGE + "/lang/{lang}", LoginController::lang, UserRole.ANYONE);
         app.get("/logout", LoginController::destroy, UserRole.AUTHED);
     }
 

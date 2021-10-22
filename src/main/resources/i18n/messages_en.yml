@@ -1,0 +1,10 @@
+controls:
+  buttons:
+    ok: ok
+    cancel: cancel
+login:
+  SignIn: Seeg me in, please
+regisgter:
+  messages2: text
+mail:
+  conformation: "Elephant: Welcome to the club buddy"

@@ -11,7 +11,7 @@
         <div class="col-md-10 mx-auto col-lg-5">
             #parse("/velocity/snippets/_notice.vm")
             <form class="p-4 p-md-5 border shadow" action="login" method="post">
-                <input name="_csrf" value="$csrf" type="hidden"/>
+                <input name="_csrf" value="$!csrf" type="hidden"/>
                 <div class="form-floating mb-3">
                     <input type="email" name="login" class="form-control" id="floatingInput"
                            placeholder="name@example.com">
@@ -27,7 +27,7 @@
                         <input type="checkbox" value="remember-me"> Remember me
                     </label>
                 </div>
-                <button class="w-100 btn" type="submit">Sign in</button>
+                <button class="w-100 btn" type="submit">$msg.get("login.SignIn")</button>
                 <hr class="my-4">
                 <small class="text-muted">By clicking Sign in, you agree to the terms of use.</small>
                 <p><a href="/login/reset-password">Forgot password?</a></p>
