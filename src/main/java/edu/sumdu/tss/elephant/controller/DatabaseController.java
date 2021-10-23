@@ -1,7 +1,6 @@
 package edu.sumdu.tss.elephant.controller;
 
 import edu.sumdu.tss.elephant.helper.UserRole;
-import edu.sumdu.tss.elephant.helper.ViewHelper;
 import edu.sumdu.tss.elephant.helper.utils.StringUtils;
 import edu.sumdu.tss.elephant.model.Database;
 import edu.sumdu.tss.elephant.model.DatabaseService;
@@ -22,9 +21,8 @@ public class DatabaseController extends AbstractController {
     }
 
     public static void show(Context context) {
-        String dbName = context.pathParam("database");
-        Database database = DatabaseService.activeDatabase(currentUser(context).getUsername(), dbName);
-        var model = ViewHelper.defaultVariables(context);
+        Database database = currentDB(context);
+        var model = currentModel(context);
         model.put("databaseSize", DatabaseService.size(database.getName()));
         context.render("/velocity/database/show.vm", model);
     }

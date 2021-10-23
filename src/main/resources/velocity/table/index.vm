@@ -15,7 +15,7 @@
             #set ($table = $row.getObject("name"))
             <td class="#if($table.toString().startsWith("pg_") || $table.toString().startsWith(
                 "sql_"))system_table#{else}user_table#end">
-                <a href="/database/$database/table/$table">$table</a>
+                <a href="/database/$database.name/table/$table">$table</a>
             </td>
         </tr>
     #end

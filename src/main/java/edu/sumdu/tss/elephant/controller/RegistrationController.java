@@ -3,7 +3,6 @@ package edu.sumdu.tss.elephant.controller;
 import edu.sumdu.tss.elephant.helper.Keys;
 import edu.sumdu.tss.elephant.helper.MailService;
 import edu.sumdu.tss.elephant.helper.UserRole;
-import edu.sumdu.tss.elephant.helper.ViewHelper;
 import edu.sumdu.tss.elephant.helper.enums.Lang;
 import edu.sumdu.tss.elephant.helper.exception.HttpError500;
 import edu.sumdu.tss.elephant.helper.exception.NotFoundException;
@@ -27,12 +26,10 @@ public class RegistrationController extends AbstractController {
     }
 
     public static void show(Context ctx) {
-        var model = ViewHelper.defaultVariables(ctx);
-        ctx.render("/velocity/registration/show.vm", model);
+        ctx.render("/velocity/registration/show.vm", currentModel(ctx));
     }
 
     public static void create(Context context) {
-        System.out.println("Start registration");
         try {
             String lang = (String) Optional.ofNullable(context.sessionAttribute(Keys.LANG_KEY)).orElse(Keys.get("DEFAULT_LANG"));
             User newUser = UserService.newDefaultUser();

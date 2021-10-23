@@ -62,7 +62,7 @@ public class MailService {
         MimeBodyPart htmlPart = new MimeBodyPart();
         String html = mail.getResource("i18n/mail_conformation.html", lang);
         if (html != null) {
-            textPart.setContent(String.format(html, Keys.get("APP.URL"), token), "text/plain; charset=utf-8");
+            htmlPart.setContent(String.format(html, Keys.get("APP.URL"), token), "text/html; charset=utf-8");
             mmp.addBodyPart(htmlPart);
         }
 
@@ -91,8 +91,13 @@ public class MailService {
     private String getResource(String resource, Lang langCode) {
         try {
             String lang = langCode.toString().toLowerCase();
-            URL textUrl = Resources.getResource(StringUtils.replaceLast(resource, ".", "_" + lang + "."));
-            return Resources.toString(textUrl, StandardCharsets.UTF_8);
+            String resourceName = StringUtils.replaceLast(resource, ".", "_" + lang + ".");
+            JavalinLogger.info(resourceName);
+            URL url = Resources.getResource(resourceName);
+            JavalinLogger.info(url.toString());
+            String result = Resources.toString(url, StandardCharsets.UTF_8);
+            JavalinLogger.info(result);
+            return result;
         } catch (IOException e) {
             JavalinLogger.info(e.getMessage());
             e.printStackTrace();

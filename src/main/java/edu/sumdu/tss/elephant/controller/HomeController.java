@@ -1,7 +1,6 @@
 package edu.sumdu.tss.elephant.controller;
 
 import edu.sumdu.tss.elephant.helper.UserRole;
-import edu.sumdu.tss.elephant.helper.ViewHelper;
 import edu.sumdu.tss.elephant.model.DatabaseService;
 import edu.sumdu.tss.elephant.model.User;
 import edu.sumdu.tss.elephant.model.UserService;
@@ -18,11 +17,8 @@ public class HomeController extends AbstractController {
 
     public static void show(Context context) {
         User current = currentUser(context);
-        var model = ViewHelper.defaultVariables(context);
+        var model = currentModel(context);
         var bases = DatabaseService.forUser(current.getUsername());
-        System.out.println("=========== Home ===========");
-        System.out.println(current.getUsername());
-        System.out.println("Bases:" + bases.size());
         model.put("bases", bases);
         long usedStorageSize = UserService.storageSize(current.getUsername());
         long maxStorageSize = current.role().maxStorage();

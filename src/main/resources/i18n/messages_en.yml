@@ -3,7 +3,7 @@ controls:
     ok: ok
     cancel: cancel
 login:
-  SignIn: Seeg me in, please
+  SignIn: Sign me in, please
 regisgter:
   messages2: text
 mail:

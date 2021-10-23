@@ -1,7 +1,6 @@
 package edu.sumdu.tss.elephant.controller;
 
 import edu.sumdu.tss.elephant.helper.UserRole;
-import edu.sumdu.tss.elephant.helper.ViewHelper;
 import edu.sumdu.tss.elephant.model.DbUserService;
 import edu.sumdu.tss.elephant.model.User;
 import edu.sumdu.tss.elephant.model.UserService;
@@ -17,12 +16,10 @@ public class ProfileController extends AbstractController {
     }
 
     public static void show(Context context) {
-        var model = ViewHelper.defaultVariables(context);
-        context.render("/velocity/profile/show.vm", model);
+        context.render("/velocity/profile/show.vm", currentModel(context));
     }
 
     public static void resetPassword(Context context) {
-        var model = ViewHelper.defaultVariables(context);
         User user = currentUser(context);
         //TODO add password validation
         String newPassword = context.formParam("password");
@@ -32,7 +29,6 @@ public class ProfileController extends AbstractController {
     }
 
     public static void language(Context context) {
-        var model = ViewHelper.defaultVariables(context);
         User user = currentUser(context);
         //TODO add lang validation
         user.setLanguage(context.queryParam("lang"));
@@ -41,7 +37,6 @@ public class ProfileController extends AbstractController {
     }
 
     private static void resetDbPassword(Context context) {
-        var model = ViewHelper.defaultVariables(context);
         User user = currentUser(context);
         //TODO add password validation
         user.setDbPassword(context.formParam("db-password"));
@@ -51,7 +46,6 @@ public class ProfileController extends AbstractController {
     }
 
     private static void resetWebPassword(Context context) {
-        var model = ViewHelper.defaultVariables(context);
         User user = currentUser(context);
         //TODO add password validation
         user.setPassword(context.formParam("web-password"));
@@ -61,7 +55,6 @@ public class ProfileController extends AbstractController {
 
 
     private static void upgradeUser(Context context) {
-        var model = ViewHelper.defaultVariables(context);
         User user = currentUser(context);
         user.setRole(UserRole.valueOf(context.formParam("role")).getValue());
         UserService.save(user);
@@ -69,7 +62,6 @@ public class ProfileController extends AbstractController {
     }
 
     private static void removeSelf(Context context) {
-        var model = ViewHelper.defaultVariables(context);
         User user = currentUser(context);
         DbUserService.dropUser(user.getUsername());
         //TODO: delete all user-specific files

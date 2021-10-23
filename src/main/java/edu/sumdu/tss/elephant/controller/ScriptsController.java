@@ -6,6 +6,7 @@ import edu.sumdu.tss.elephant.helper.ViewHelper;
 import edu.sumdu.tss.elephant.helper.exception.AccessRestrictedException;
 import edu.sumdu.tss.elephant.helper.exception.HttpError400;
 import edu.sumdu.tss.elephant.helper.exception.HttpError500;
+import edu.sumdu.tss.elephant.helper.exception.NotFoundException;
 import edu.sumdu.tss.elephant.helper.sql.ScriptReader;
 import edu.sumdu.tss.elephant.helper.utils.ParameterizedStringFactory;
 import edu.sumdu.tss.elephant.helper.utils.StringUtils;
@@ -61,28 +62,23 @@ public class ScriptsController extends AbstractController {
     }
 
     private static void show(Context context) {
-        String database = context.pathParam("database");
-        var model = ViewHelper.defaultVariables(context);
         String scriptId = context.pathParam("script");
         Script script = ScriptService.byId(Integer.valueOf(scriptId));
-        //TODO: check: current user is owner for database
-        //TODO: externalize owning check to access manager
-        if (!script.getDatabase().equals(database)) {
+
+        if (!script.getDatabase().equals(currentDB(context).getName())) {
             throw new AccessRestrictedException("Script has other owner");
         }
         try {
             context.result(new FileInputStream(script.getPath()));
         } catch (FileNotFoundException e) {
-            //TODO: smart replace
-            e.printStackTrace();
+            throw new HttpError500("File not found", e);
         }
     }
 
     private static void index(Context context) {
-        String database = context.pathParam("database");
-        var model = ViewHelper.defaultVariables(context);
-        model.put("scripts", ScriptService.list(database));
-        ViewHelper.breadcrumb(context).add(DEFAULT_CRUMB.addParameter("database", database).toString());
+        var model = currentModel(context);
+        model.put("scripts", ScriptService.list(currentDB(context).getName()));
+        ViewHelper.breadcrumb(context).add("Scripts");
         context.render("/velocity/script/index.vm", model);
     }
 
@@ -130,20 +126,20 @@ public class ScriptsController extends AbstractController {
                 e.printStackTrace();
             }
         }
-        String database = context.pathParam("database");
-        var model = ViewHelper.defaultVariables(context);
+        var model = currentModel(context);
         model.put("executeResults", list);
-        ViewHelper.breadcrumb(context).add(DEFAULT_CRUMB.addParameter("database", database).toString());
         context.render("/velocity/script/run.vm", model);
     }
 
     private static void delete(Context context) {
-        String database = context.pathParam("database");
-        //TODO validate ownership
         String scriptId = context.pathParam("script");
+        String dbName = currentDB(context).getName();
         Script script = ScriptService.byId(Integer.valueOf(scriptId));
+        if (script.getDatabase().equals(dbName)) {
+            throw new NotFoundException("Script not found");
+        }
         ScriptService.destroy(script);
-        context.redirect(BASIC_PAGE.replace("{database}", database));
+        context.redirect(BASIC_PAGE.replace("{database}", dbName));
     }
 
     public void register(Javalin app) {

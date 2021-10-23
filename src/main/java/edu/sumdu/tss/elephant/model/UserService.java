@@ -49,9 +49,7 @@ public class UserService {
     public static void save(User user) {
         try (Connection con = DBPool.getConnection().open()) {
             String query = user.getId() == null ? INSERT_SQL : UPDATE_SQL;
-            System.out.println("SQL fro user save:" + query);
             long id = con.createQuery(query).bind(user).executeUpdate().getKey(Long.class);
-            System.out.println("User id:" + id);
         } catch (Exception ex) {
             ex.printStackTrace();
             throw new RuntimeException(ex);

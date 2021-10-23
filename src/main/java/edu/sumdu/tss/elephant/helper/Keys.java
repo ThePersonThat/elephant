@@ -22,6 +22,9 @@ public class Keys {
     public static final String[] SECURED_PARAMS = {"DB.PASSWORD", "EMAIL.PASSWORD"};
     public static final String SESSION_CURRENT_USER_KEY = "currentUser";
     public static final String BREADCRUMB_KEY = "breadcrumb";
+    public static final String DB_KEY = "database";
+    public static final String MODEL_KEY = "model";
+
     private static HashMap<String, String> keys = null;
 
     public static void loadParams(File properties) {

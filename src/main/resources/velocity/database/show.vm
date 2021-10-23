@@ -7,7 +7,7 @@
     <div class="row row-cols-1 row-cols-md-2 g-4">
         <div class="col">
             <div class="card">
-                <a class="nav-link active" aria-current="page" href="/database/$database/table">
+                <a class="nav-link active" aria-current="page" href="/database/$database.name/table">
                     <ion-icon name="file-tray-stacked-outline"></ion-icon>
                     <div class="card-body">
                         <h5 class="card-title">Tables</h5>
@@ -19,7 +19,7 @@
         </div>
         <div class="col">
             <div class="card">
-                <a class="nav-link active" aria-current="page" href="/database/$database/point">
+                <a class="nav-link active" aria-current="page" href="/database/$database.name/point">
                     <ion-icon name="file-tray-stacked-outline"></ion-icon>
                     <div class="card-body">
                         <h5 class="card-title">Backups</h5>
@@ -31,7 +31,7 @@
         </div>
         <div class="col">
             <div class="card">
-                <a class="nav-link active" aria-current="page" href="/database/$database/script">
+                <a class="nav-link active" aria-current="page" href="/database/$database.name/script">
                     <ion-icon name="receipt-outline"></ion-icon>
                     <div class="card-body">
                         <h5 class="card-title">Scripts</h5>
@@ -43,7 +43,7 @@
         </div>
         <div class="col">
             <div class="card">
-                <a class="nav-link active" aria-current="page" href="/database/$database/sql">
+                <a class="nav-link active" aria-current="page" href="/database/$database.name/sql">
                     <ion-icon name="code-slash-outline"></ion-icon>
                     <div class="card-body">
                         <h5 class="card-title">Tables</h5>

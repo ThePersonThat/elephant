@@ -22,12 +22,11 @@ public class SqlController extends AbstractController {
     }
 
     private static void show(Context context) {
-        String dbName = context.pathParam("database");
-        Database database = DatabaseService.activeDatabase(currentUser(context).getUsername(), dbName);
-        var model = ViewHelper.defaultVariables(context);
+        Database database = currentDB(context);
+        var model = currentModel(context);
         model.put("query", context.sessionAttribute("query"));
         context.sessionAttribute("query", null);
-        ViewHelper.breadcrumb(context).add(DEFAULT_CRUMB.addParameter("database", dbName).toString());
+        ViewHelper.breadcrumb(context).add("SQL console");
         context.render("/velocity/sql/show.vm", model);
     }
 

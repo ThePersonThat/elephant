@@ -12,7 +12,7 @@
                 #foreach ($script in $scripts)
                     <div class="card-body border mb-1">
                         <div class="card-title">
-                            <a href="/database/$database/script/$script.id">
+                            <a href="/database/$database.name/script/$script.id">
                                 <h6>
                                     <ion-icon name="server-outline"></ion-icon>
                                     $script.filename
@@ -22,12 +22,13 @@
                         </div>
                         <div class="card-meta">
                             <div class="card-options">
-                                <form method="post" action="/database/$database/script/$script.id" class="d-inline">
+                                <form method="post" action="/database/$database.name/script/$script.id"
+                                      class="d-inline">
                                     <button class="btn" type="submit">
                                         <ion-icon name="play"></ion-icon>
                                     </button>
                                 </form>
-                                <form method="post" action="/database/$database/script/$script.id/delete"
+                                <form method="post" action="/database/$database.name/script/$script.id/delete"
                                       class="d-inline">
                                     <button class="btn" type="submit">
                                         <ion-icon name="trash"></ion-icon>
@@ -46,7 +47,7 @@
 
 <div class="container">
     <h3>New scripts</h3>
-    <form action="/database/$database/script/" method="post" class="shadow border" enctype="multipart/form-data">
+    <form action="/database/$database.name/script/" method="post" class="shadow border" enctype="multipart/form-data">
         <input name="_csrf" value="$csrf" type="hidden"/>
         <div class="form-floating mb-3">
             <input type="file" name="file">

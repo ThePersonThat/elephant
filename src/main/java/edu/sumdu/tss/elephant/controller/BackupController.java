@@ -5,8 +5,6 @@ import edu.sumdu.tss.elephant.helper.ViewHelper;
 import edu.sumdu.tss.elephant.helper.utils.ParameterizedStringFactory;
 import edu.sumdu.tss.elephant.model.Backup;
 import edu.sumdu.tss.elephant.model.BackupService;
-import edu.sumdu.tss.elephant.model.Database;
-import edu.sumdu.tss.elephant.model.DatabaseService;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -26,13 +24,12 @@ public class BackupController extends AbstractController {
     }
 
     public static void create(Context context) {
-        String dbName = context.pathParam("database");
+        String dbName = currentDB(context).getName();
         String point = context.formParam("point");
         if (point == null) {
             point = context.pathParam("point");
         }
-        Database database = DatabaseService.activeDatabase(currentUser(context).getUsername(), dbName);
-        BackupService.perform(currentUser(context).getUsername(), database.getName(), point);
+        BackupService.perform(currentUser(context).getUsername(), dbName, point);
         context.redirect(BASIC_PAGE.replace("{database}", dbName));
     }
 
@@ -43,22 +40,20 @@ public class BackupController extends AbstractController {
     }
 
     public static void index(Context context) {
-        String dbName = context.pathParam("database");
-        Database database = DatabaseService.activeDatabase(currentUser(context).getUsername(), dbName);
-        var model = ViewHelper.defaultVariables(context);
-        model.put("points", BackupService.list(database.getName()));
-        ViewHelper.breadcrumb(context).add(DEFAULT_CRUMB.addParameter("database", dbName).toString());
+        var model = currentModel(context);
+        var dbName = currentDB(context).getName();
+        model.put("points", BackupService.list(dbName));
+        ViewHelper.breadcrumb(context).add("Backups");
         context.render("/velocity/point/index.vm", model);
     }
 
     private static Backup setupPoint(Context context) {
-        String dbName = context.pathParam("database");
+        String dbName = currentDB(context).getName();
         String point = context.formParam("point");
         if (point == null) {
             point = context.pathParam("point");
         }
-        Database database = DatabaseService.activeDatabase(currentUser(context).getUsername(), dbName);
-        return BackupService.byName(database.getName(), point);
+        return BackupService.byName(dbName, point);
     }
 
     public void register(Javalin app) {

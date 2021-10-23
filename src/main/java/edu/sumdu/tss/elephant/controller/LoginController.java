@@ -3,7 +3,6 @@ package edu.sumdu.tss.elephant.controller;
 import edu.sumdu.tss.elephant.helper.Keys;
 import edu.sumdu.tss.elephant.helper.MailService;
 import edu.sumdu.tss.elephant.helper.UserRole;
-import edu.sumdu.tss.elephant.helper.ViewHelper;
 import edu.sumdu.tss.elephant.helper.enums.Lang;
 import edu.sumdu.tss.elephant.helper.exception.HttpError500;
 import edu.sumdu.tss.elephant.helper.exception.NotFoundException;
@@ -28,8 +27,7 @@ public class LoginController extends AbstractController {
     }
 
     public static void show(Context context) {
-        var model = ViewHelper.defaultVariables(context);
-        context.render("/velocity/login/show.vm", model);
+        context.render("/velocity/login/show.vm", currentModel(context));
     }
 
     public static void create(Context context) {
@@ -41,7 +39,6 @@ public class LoginController extends AbstractController {
         } catch (NotFoundException ex) {
         }
         if (user != null && user.getPassword().equals(password)) {
-            System.out.println("well done");
             context.sessionAttribute(Keys.SESSION_CURRENT_USER_KEY, user);
             context.redirect(HomeController.BASIC_PAGE);
             return;
@@ -109,7 +106,7 @@ public class LoginController extends AbstractController {
         }
         JavalinLogger.info(lang);
 
-        context.sessionAttribute(Keys.LANG_KEY, lang != null ? lang : Keys.get("DEFAULT_LANG"));
+        context.sessionAttribute(Keys.LANG_KEY, Optional.ofNullable(lang).orElse(Keys.get("DEFAULT_LANG")));
         context.redirect(Optional.ofNullable(context.header("Referer")).orElse("/"));
     }
 

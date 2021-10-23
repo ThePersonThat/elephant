@@ -4,7 +4,6 @@ import edu.sumdu.tss.elephant.helper.UserRole;
 import edu.sumdu.tss.elephant.helper.ViewHelper;
 import edu.sumdu.tss.elephant.helper.utils.ParameterizedStringFactory;
 import edu.sumdu.tss.elephant.model.Database;
-import edu.sumdu.tss.elephant.model.DatabaseService;
 import edu.sumdu.tss.elephant.model.TableService;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
@@ -24,31 +23,27 @@ public class TableController extends AbstractController {
     }
 
     public static void index(Context context) {
-        System.out.println("Database controller: show");
-        String dbName = context.pathParam("database");
-        Database database = DatabaseService.activeDatabase(currentUser(context).getUsername(), dbName);
+        Database database = currentDB(context);
         var tables = TableService.list(database.getName());
-        var model = ViewHelper.defaultVariables(context);
+        var model = currentModel(context);
         model.put("tables", tables);
-        ViewHelper.breadcrumb(context).add(DEFAULT_CRUMB.addParameter("database", dbName).toString());
+        ViewHelper.breadcrumb(context).add("Tables");
         context.render("/velocity/table/index.vm", model);
     }
 
     public static void preview_table(Context context) {
-        String dbName = context.pathParam("database");
-        Database database = DatabaseService.activeDatabase(currentUser(context).getUsername(), dbName);
+        Database database = currentDB(context);
         String tableName = context.pathParam("table");
         int limit = Integer.valueOf(Optional.ofNullable(context.queryParam("limit")).orElse("10"));
         int offset = Integer.valueOf(Optional.ofNullable(context.queryParam("offset")).orElse("0"));
         var table = TableService.byName(database.getName(), tableName, limit, offset * limit);
         int size = TableService.getTableSize(database.getName(), tableName);
 
-        var model = ViewHelper.defaultVariables(context);
+        var model = currentModel(context);
         model.put("table", table);
         model.put("pager", ViewHelper.pager((size / limit) + 1, offset));
-        var breadcrumb = ViewHelper.breadcrumb(context);
-        breadcrumb.add(DEFAULT_CRUMB.addParameter("database", dbName).toString());
-        breadcrumb.add(tableName);
+        ViewHelper.breadcrumb(context).add("Tables");
+        ViewHelper.breadcrumb(context).add(tableName);
         context.render("/velocity/table/show.vm", model);
     }
 

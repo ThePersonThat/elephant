@@ -47,9 +47,8 @@ public class Server {
                 .before(context -> {
                     JavalinLogger.info("[" + context.method() + "] " + context.url());
                 })
-                .before(context -> {
-                    context.sessionAttribute(Keys.BREADCRUMB_KEY, null);
-                })
+                .before(ViewHelper::defaultVariables)
+                .after(ViewHelper::cleanupSession)
                 .exception(HttpException.class, ViewHelper::userError)
                 .exception(Exception.class, (e, ctx) -> {
                     ViewHelper.userError(new HttpException(e), ctx);

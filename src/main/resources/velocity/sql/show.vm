@@ -1,6 +1,6 @@
 #parse("/velocity/db_layout.vm")
 #@dbLayout()
-<script>QUERY_URL = "/database/$database/sql";</script>
+<script>QUERY_URL = "/database/$database.name/sql";</script>
 <script src="/js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
 <script src="/js/db150.js" type="text/javascript" charset="utf-8"></script>
 <script src="/js/jquery.js" type="text/javascript" charset="utf-8"></script>

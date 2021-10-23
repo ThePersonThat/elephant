@@ -19,15 +19,15 @@
                         </div>
                         <div class="card-meta">
                             <div class="card-options">
-                                <form action="/database/$database/point/$point.point/create" method="post"
+                                <form action="/database/$database.name/point/$point.point/create" method="post"
                                       class="d-inline">
                                     <input type="submit" value="update">
                                 </form>
-                                <form action="/database/$database/point/$point.point/reset" method="post"
+                                <form action="/database/$database.name/point/$point.point/reset" method="post"
                                       class="d-inline">
                                     <input type="submit" value="reset">
                                 </form>
-                                <form action="/database/$database/point/$point.point/delete" method="post"
+                                <form action="/database/$database.name/point/$point.point/delete" method="post"
                                       class="d-inline">
                                     <input type="submit" value="delete">
                                 </form>
@@ -45,7 +45,7 @@
 <div class="container">
     <h3>New backup</h3>
     #if($currentUser.role().maxBackupsPerDB() >= $points.size())
-        <form action="/database/$database/point/" method="post" class="shadow border">
+        <form action="/database/$database.name/point/" method="post" class="shadow border">
             <input name="_csrf" value="$csrf" type="hidden"/>
             <div class="form-floating mb-3">
                 <input type="text" name="point" class="form-control" id="floatingInput" placeholder="point">
