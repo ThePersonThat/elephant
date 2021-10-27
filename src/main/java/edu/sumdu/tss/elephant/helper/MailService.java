@@ -50,12 +50,12 @@ public class MailService {
         message.setFrom(new InternetAddress(mail.from));
         message.addRecipient(Message.RecipientType.TO, new InternetAddress(mailTo));
         message.setSubject(new MessageBundle(lang.toString()).get("mail.conformation"));
-        Multipart mmp = new MimeMultipart();
+        Multipart mmp = new MimeMultipart("alternative");
 
         MimeBodyPart textPart = new MimeBodyPart();
         String text = mail.getResource("i18n/mail_conformation.txt", lang);
         if (text != null) {
-            textPart.setContent(String.format(text, Keys.get("APP.URL"), token), "text/plain; charset=utf-8");
+            textPart.setText(String.format(text, Keys.get("APP.URL"), token), "utf-8");
             mmp.addBodyPart(textPart);
         }
 
@@ -74,7 +74,7 @@ public class MailService {
         Message message = new MimeMessage(mail.session);
         message.setFrom(new InternetAddress(mail.from));
         message.addRecipient(Message.RecipientType.TO, new InternetAddress(mailTo));
-        if (lang == Lang.UA) {
+        if (lang == Lang.UK) {
             message.setSubject("Elephant: Відновлення паролю");
             message.setText(String.format(
                     "Ваше посилання для відновлення паролю,  %s/login/reset?token=%s" +

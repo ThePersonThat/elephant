@@ -12,7 +12,6 @@ import edu.sumdu.tss.elephant.helper.utils.ParameterizedStringFactory;
 import edu.sumdu.tss.elephant.helper.utils.StringUtils;
 import edu.sumdu.tss.elephant.model.Script;
 import edu.sumdu.tss.elephant.model.ScriptService;
-import edu.sumdu.tss.elephant.model.User;
 import edu.sumdu.tss.elephant.model.UserService;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
@@ -33,16 +32,15 @@ public class ScriptsController extends AbstractController {
         super(app);
     }
 
-    //FIXME: database owner not checked
     private static void create(Context context) {
-        String database = context.pathParam("database");
-        User currentUser = currentUser(context);
+        var database = currentDB(context);
+        var currentUser = currentUser(context);
         var file = context.uploadedFile("file");
         System.out.println("file:");
         System.out.println(file);
         String path = UserService.userStoragePath(currentUser.getUsername()) +
                 File.separator + "scripts" +
-                File.separator + database +
+                File.separator + database.getName() +
                 File.separator + StringUtils.randomAlphaString(20);
         var destinationFile = new File(path);
         try {
@@ -55,10 +53,10 @@ public class ScriptsController extends AbstractController {
         script.setFilename(file.getFilename());
         script.setSize(file.getSize());
         script.setPath(path);
-        script.setDatabase(database);
+        script.setDatabase(database.getName());
         ScriptService.save(script);
 
-        context.redirect(BASIC_PAGE.replace("{database}", database));
+        context.redirect(BASIC_PAGE.replace("{database}", database.getName()));
     }
 
     private static void show(Context context) {

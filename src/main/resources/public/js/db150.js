@@ -94,7 +94,6 @@ window.onload = function() {
         readOnly: true
     }]);
 
-    //todo add rules for oracle words highlighting
     editor.focus();
 };
 

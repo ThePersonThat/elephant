@@ -2,13 +2,13 @@
     <li class="nav-item">
         <a class="nav-link active" aria-current="page" href="/">
             <ion-icon name="file-tray-stacked-outline"></ion-icon>
-            Dashboard
+            $msg.get("dashboard.dashboard.title")
         </a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="/profile">
             <ion-icon name="file-tray-stacked-outline"></ion-icon>
-            Profile
+            $msg.get("dashboard.profile.title")
         </a>
     </li>
 </ul>

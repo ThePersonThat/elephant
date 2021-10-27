@@ -54,4 +54,18 @@ public class DatabaseService {
                 .executeUpdate();
     }
 
+    private static final ParameterizedStringFactory DROP_DATABASE_SQL = new ParameterizedStringFactory("DROP DATABASE :name WITH (FORCE);");
+    private static final String UNREGISTER_DATABASE_SQL = "delete from databases where name=:name and owner= :owner";
+
+    public static void drop(Database database) {
+        var connection = DBPool.getConnection().open();
+        String query = DROP_DATABASE_SQL.addParameter("name", database.getName()).toString();
+        connection.createQuery(query, false)
+                .executeUpdate();
+        connection.createQuery(UNREGISTER_DATABASE_SQL)
+                .addParameter("name", database.getName())
+                .addParameter("owner", database.getOwner())
+                .executeUpdate();
+    }
+
 }

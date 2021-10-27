@@ -12,7 +12,8 @@
         <div class="col">
             <div class="form-group">
                 <label for="db-password">Password</label>
-                <input type="text" class="form-control" id="db-password" aria-describedby="db-password-help"
+                <input type="text" class="form-control" id="db-password" name="db-password"
+                       aria-describedby="db-password-help"
                        value="$currentUser.dbPassword">
                 <small id="db-password-help" class="form-text text-muted">Database password</small>
             </div>

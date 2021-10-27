@@ -3,7 +3,7 @@
 <div class="container">
     <div class="card-list">
         <div class="card-list-head">
-            <h3>Backups</h3>
+            <h3>$msg.get("database.backup.title")</h3>
         </div>
         <div class="card-list-body card-task">
 
@@ -21,41 +21,41 @@
                             <div class="card-options">
                                 <form action="/database/$database.name/point/$point.point/create" method="post"
                                       class="d-inline">
-                                    <input type="submit" value="update">
+                                    <input type="submit" value="$msg.get("controls.button.update")">
                                 </form>
                                 <form action="/database/$database.name/point/$point.point/reset" method="post"
                                       class="d-inline">
-                                    <input type="submit" value="reset">
+                                    <input type="submit" value="$msg.get("controls.button.reset")">
                                 </form>
                                 <form action="/database/$database.name/point/$point.point/delete" method="post"
                                       class="d-inline">
-                                    <input type="submit" value="delete">
+                                    <input type="submit" value="$msg.get("controls.button.delete")">
                                 </form>
                             </div>
                         </div>
                     </div>
                 #end
             #else
-                <p>Currently you have no one backups on this database</p>
+                <p>$msg.get("database.backup.empty")</p>
             #end
         </div>
     </div>
 </div>
 
 <div class="container">
-    <h3>New backup</h3>
+    <h3>$msg.get("database.backup.from.title")</h3>
     #if($currentUser.role().maxBackupsPerDB() >= $points.size())
         <form action="/database/$database.name/point/" method="post" class="shadow border">
             <input name="_csrf" value="$csrf" type="hidden"/>
             <div class="form-floating mb-3">
                 <input type="text" name="point" class="form-control" id="floatingInput" placeholder="point">
-                <label for="floatingInput">Backup Name</label>
+                <label for="floatingInput">$msg.get("database.script.form.name")</label>
             </div>
-            <button class="w-100 btn" type="submit">Create new backup</button>
+            <button class="w-100 btn" type="submit">$msg.get("database.script.form.create_button")</button>
         </form>
     #else
-        You reach you limit - delete one or upgrade plan.
-        <button class="w-100 btn disabled" type="submit">Create new backup</button>
+        $msg.get("database.script.form.limit")
+        <button class="w-100 btn disabled" type="submit">$msg.get("database.script.form.create_button")</button>
     #end
 </div>
 

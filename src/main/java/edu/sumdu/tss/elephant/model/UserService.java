@@ -40,23 +40,25 @@ public class UserService {
     }
 
     private static final String USER_LIST_SQL = "SELECT id, login, username FROM users";
+
     public static List<User> list() {
         try (Connection con = DBPool.getConnection().open()) {
             return con.createQuery(USER_LIST_SQL).executeAndFetch(User.class);
         }
     }
 
+    private static final String USER_BY_KEY_SQL = "SELECT * FROM users WHERE publicKey = :publicKey";
+
     public static void save(User user) {
         try (Connection con = DBPool.getConnection().open()) {
             String query = user.getId() == null ? INSERT_SQL : UPDATE_SQL;
             long id = con.createQuery(query).bind(user).executeUpdate().getKey(Long.class);
+            user.setId(id);
         } catch (Exception ex) {
             ex.printStackTrace();
             throw new RuntimeException(ex);
         }
     }
-
-    private static final String USER_BY_KEY_SQL = "SELECT id, login, role, username, language, publicKey, privateKey FROM users WHERE publicKey = :publicKey";
     private static final String[] SPACE_SCOPES = new String[]{"tablespace", "scripts", "backups"};
 
     //"    [ WITH ( параметр_табличного_пространства = значение [, ... ] ) ]"

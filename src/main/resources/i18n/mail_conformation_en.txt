@@ -1,3 +1,9 @@
-Hello friend, it seems that you have successfully registered your Union,
-what do you have to do by click the link : %s/registration/confirm/%s
+Hi there,
+
+Thank you for joining Elephant.
+
+We&#8217;d like to confirm that your account was created successfully. To access Elephant click the link below.
+
+ %s/registration/confirm/%s
+
 (if you did not register then just ignore this message)

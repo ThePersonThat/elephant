@@ -1,5 +1,6 @@
 package edu.sumdu.tss.elephant.controller;
 
+import edu.sumdu.tss.elephant.helper.Keys;
 import edu.sumdu.tss.elephant.helper.UserRole;
 import edu.sumdu.tss.elephant.helper.utils.StringUtils;
 import edu.sumdu.tss.elephant.model.Database;
@@ -23,7 +24,6 @@ public class DatabaseController extends AbstractController {
     public static void show(Context context) {
         Database database = currentDB(context);
         var model = currentModel(context);
-        model.put("databaseSize", DatabaseService.size(database.getName()));
         context.render("/velocity/database/show.vm", model);
     }
 
@@ -32,12 +32,23 @@ public class DatabaseController extends AbstractController {
         String dbName = StringUtils.randomAlphaString(8);
         DatabaseService.create(dbName, user.getUsername(), user.getUsername());
         LogService.push(context, dbName, "Database created");
+        context.sessionAttribute(Keys.INFO_KEY, "Database created");
         context.redirect(BASIC_PAGE + dbName);
+    }
+
+    public static void delete(Context context) {
+        User user = currentUser(context);
+        Database database = currentDB(context);
+        DatabaseService.drop(database);
+        LogService.push(context, database.getName(), "Database droped");
+        context.sessionAttribute(Keys.INFO_KEY, "Database droped");
+        context.redirect(HomeController.BASIC_PAGE);
     }
 
     @Override
     public void register(Javalin app) {
         app.get(BASIC_PAGE + "{database}", DatabaseController::show, UserRole.AUTHED);
+        app.post(BASIC_PAGE + "{database}/delete", DatabaseController::delete, UserRole.AUTHED);
         app.post(BASIC_PAGE, DatabaseController::create, UserRole.AUTHED);
     }
 

@@ -42,6 +42,7 @@ public class Server {
                             config.accessManager(CustomAccessManager.accessManager);
                             config.registerPlugin(new OpenApiPlugin(getOpenApiOptions()));
                         })
+                //TODO: fix this: csrf checking work only for '/'
                 .before("/", CSRFFilter::check)
                 .before("/", CSRFFilter::generate)
                 .before(context -> {

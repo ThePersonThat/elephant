@@ -1,0 +1,53 @@
+#macro(dbPresets $dbName)
+<nav>
+    <div class="nav nav-tabs" id="connection-$dbNam" role="tablist">
+        <button class="nav-link active" id="jdbc-$dbName-tab" data-bs-toggle="tab" data-bs-target="#jdbc-$dbName"
+                type="button" role="tab" aria-controls="jdbc-$dbName" aria-selected="true">JDBC
+        </button>
+        <button class="nav-link" id="client-$dbName-tab" data-bs-toggle="tab" data-bs-target="#client-$dbName"
+                type="button" role="tab" aria-controls="client-$dbName" aria-selected="false">Client
+        </button>
+        <button class="nav-link" id="php-$dbName-tab" data-bs-toggle="tab" data-bs-target="#php-$dbName" type="button"
+                role="tab" aria-controls="php-$dbName" aria-selected="false">PHP
+        </button>
+    </div>
+</nav>
+<div class="tab-content" id="connection-details-$dbName">
+    <div class="tab-pane fade show active" id="jdbc-$dbName" role="tabpanel" aria-labelledby="jdbc-$dbName">
+        jdbc:postgresql://$host:$port/$base.name?user=$currentUser.username&password=$currentUser.dbPassword&ssl=true
+    </div>
+    <div class="tab-pane fade" id="client-$dbName" role="tabpanel" aria-labelledby="client-$dbName">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="fhost-$dbName" value="$host" readonly>
+            <label for="fhost-$dbName">Host:</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="fport-$dbName" value="$port" readonly>
+            <label for="fport-$dbName">Port:</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="fdb-$dbName" value="$base.name" readonly>
+            <label for="fdb-$dbName">Database:</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="fu-$dbName" value="$currentUser.username" readonly>
+            <label for="fu-$dbName">User:</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="fp-$dbName" value="$currentUser.dbPassword" readonly>
+            <label for="fp-$dbName">Password:</label>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="php-$dbName" role="tabpanel" aria-labelledby="php-$dbName">
+        <h2>Connect to Postgresql using PHP</h2>
+
+        <p>According to manual : https://www.php.net/manual/ru/function.pg-connect.php</p>
+        <pre>
+$conn_string = "host=$host port=$port dbname=$dbName user=$currentUser.username password=$currentUser.dbPasswor";
+            $conn = pg_connect($conn_string);
+            $result = pg_query($conn, "select now()");
+var_dump(pg_fetch_all($result));
+</pre>
+    </div>
+</div>
+#end

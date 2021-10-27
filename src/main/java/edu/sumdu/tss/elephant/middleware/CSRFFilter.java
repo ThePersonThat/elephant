@@ -12,6 +12,7 @@ public class CSRFFilter {
             return;
         }
         String currentToken = Optional.ofNullable(ctx.header("X-CSRF-TOKEN")).orElse(ctx.formParam("_csrf"));
+        // TODO:
         // ! ctx.sessionAttribute("SessionID") MUST be replaced with real user session related secret
         // we need no CSRF protection for non-auth resources, so "not-auth-user" - not necessary
         // "not-auth-user" - just for example in this project

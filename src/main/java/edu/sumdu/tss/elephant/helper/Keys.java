@@ -9,21 +9,21 @@ import java.util.Map;
 import java.util.Properties;
 
 public class Keys {
-    public static final String ERROR_KEY = "error";
-    public static final String INFO_KEY = "info";
-    public static final String LANG_KEY = "lang";
 
     public static final String[] PARAMS = {
-            "DB.LOCAL_PATH", "DB.PORT", "DB.URL", "DB.NAME", "DB.USERNAME", "DB.OS_USER",
+            "DB.LOCAL_PATH", "DB.PORT", "DB.URL", "DB.NAME", "DB.USERNAME", "DB.OS_USER", "DB.HOST",
             "APP.URL", "APP.PORT",
             "EMAIL.HOST", "EMAIL.PORT", "EMAIL.USER", "EMAIL.FROM",
-            "DEFAULT_LANG"
+            "DEFAULT_LANG", "ENV"
     };
     public static final String[] SECURED_PARAMS = {"DB.PASSWORD", "EMAIL.PASSWORD"};
     public static final String SESSION_CURRENT_USER_KEY = "currentUser";
     public static final String BREADCRUMB_KEY = "breadcrumb";
     public static final String DB_KEY = "database";
     public static final String MODEL_KEY = "model";
+    public static final String ERROR_KEY = "error";
+    public static final String INFO_KEY = "info";
+    public static final String LANG_KEY = "lang";
 
     private static HashMap<String, String> keys = null;
 
@@ -72,6 +72,10 @@ public class Keys {
             throw new RuntimeException(String.format("No value for key %s", key));
         }
         return value;
+    }
+
+    public static boolean isProduction() {
+        return Keys.get("ENV").equalsIgnoreCase("production");
     }
 
     public enum FLASH_KEYS {

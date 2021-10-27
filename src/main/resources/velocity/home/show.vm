@@ -1,4 +1,5 @@
 #parse("/velocity/home_layout.vm")
+#parse("/velocity/database/_connection_spoiler.vm")
 #@homeLayout()
     #if ($currentUser.role().toString().equals("UNCHEKED"))
         #parse("/velocity/home/_no-verified.vm")
@@ -8,7 +9,7 @@
 <div class="container pt-5">
     <div class="card-list">
         <div class="card-list-head">
-            <h3>Databases</h3>
+            <h3>$msg.get('database.title')</h3>
         </div>
         <div class="card-list-body card-task">
 
@@ -22,32 +23,35 @@
                                     $base.name
                                 </h6>
                             </a>
-                            <span class="text-small">jdbc:postgresql://Keys.get("APP.URL"):$PORT/$base.name?user=$currentUser.username&password=$currentUser.dbPassword&ssl=true";</span>
+                            #dbPresets ( $base.name )
                         </div>
                         <div class="card-meta">
                             <div class="card-options">
-                                <button class="btn" type="button">test</button>
-                                <button class="btn" type="button">test2</button>
+                                <form method="post" action="/database/$base.name/delete"
+                                      class="d-inline">
+                                    <button class="btn" type="submit">
+                                        <ion-icon name="trash"></ion-icon>
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
                 #end
             #else
-                <p>Currently you have no one database</p>
+                <p>$msg.get('database.empty')</p>
             #end
         </div>
     </div>
-    #if($currentUser.role().maxDB() >= $bases.size())
+    #if($currentUser.role().maxDB() > $bases.size())
         <form class="p-4 p-md-5" action="/database" method="post">
-            <input name="_csrf" value="$csrf" type="hidden"/>
-            <button class="w-100 btn" type="submit">Create new database</button>
+            <input name="_csrf" value="$!csrf" type="hidden"/>
+            <button class="w-100 btn" type="submit">$msg.get('database.form.create_button')</button>
         </form>
     #elseif($currentUser.role().maxDB() == 0)
-        You need to approve you email before can create new DB
-        <button class="w-100 btn disabled" type="submit">Create new database</button>
+        $msg.get('database.form.approve')
+        <button class="w-100 btn disabled" type="submit">$msg.get('database.form.create_button')</button>
     #else
-        You reach you DB limit - delete one or upgrade plan.
-        <button class="w-100 btn disabled" type="submit">Create new database</button>
+        $msg.get('database.form.limits')
+        <button class="w-100 btn disabled" type="submit">$msg.get('database.form.create_button')</button>
     #end
-
 #end

@@ -14,7 +14,8 @@ create table users
     token      varchar(50)  not null,
     role       smallint     not null,
     publicKey  varchar(200) not null,
-    privateKey varchar(200) not null unique
+    privateKey varchar(200) not null unique,
+    language   char(2) default 'EN'
 );
 
 create table databases

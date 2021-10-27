@@ -6,18 +6,18 @@
                 $currentUser.login
             </a>
         </span>
-        <a class="btn px-3 text-nowrap" href="/logout">Logout</a>
+        <a class="btn px-3 text-nowrap" href="/logout">$msg.get("controls.button.logout")</a>
     #else
         #if ($lang.equals("EN"))
-            <a class="btn px-3 text-nowrap" href="/login/lang/ua">🇺🇦</a>
+            <a class="btn px-3 text-nowrap" href="/login/lang/uk">🇺🇦</a>
         #else
             <a class="btn px-3 text-nowrap" href="/login/lang/en">🇬🇧</a>
         #end
         <a class="btn px-3 text-nowrap" href="/login">
-            Sign in
+            $msg.get("controls.button.sign_in")
         </a>
         <a class="btn px-3 text-nowrap" href="/registration">
-            Sign up
+            $msg.get("controls.button.sign_up")
         </a>
     #end
 </div>

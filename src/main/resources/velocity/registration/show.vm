@@ -6,7 +6,7 @@
         <div class="col-lg-7 text-center">
             <img src="/images/hero.svg" style="height:20rem" alt="logotype"/>
             <h1 class="display-4 lh-1 mb-3 logotype-font">Elephant</h1>
-            <h2 class="fs-4">DaaS<span title="Database as a Service">*</span> just for the testing</h2>
+            <h2 class="fs-4">DaaS<span title="Database as a Service">*</span> just for the Testing</h2>
         </div>
         <div class="col-md-10 mx-auto col-lg-5">
             #parse("/velocity/snippets/_notice.vm")
@@ -15,26 +15,31 @@
                 <div class="form-floating mb-3">
                     <input type="email" name="login" class="form-control" id="email"
                            placeholder="name@example.com">
-                    <label for="email">Email address</label>
+                    <label for="email">$msg.get('login.form.email')</label>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="password" name="password" class="form-control" id="password"
-                           placeholder="Password">
-                    <label for="password">Password</label>
+                    <label for="password">$msg.get('login.form.password')</label>
+                    <div class="input-group mb-3" id="show_hide_password">
+                        <input type="password" name="password" class="form-control"
+                               placeholder="Password" aria-label="Password"
+                               aria-describedby="basic-addon2"
+                               id="password"
+                        >
+                        <span class="input-group-text" id="basic-addon2"><a href="#" id="pass-show-hide">
+                            <ion-icon name="eye" id="pass-show"></ion-icon>
+                            <ion-icon name="eye-off" id="pass-hide" style="display: none"></ion-icon>
+                        </a>
+                        </span>
+                    </div>
                 </div>
                 <div class="form-floating mb-3">
                     <input type="password" name="conformation" class="form-control" id="conformation"
                            placeholder="Password">
-                    <label for="conformation">Password conformation</label>
+                    <label for="conformation">$msg.get('login.form.password_c')</label>
                 </div>
-                <div class="checkbox mb-3">
-                    <label>
-                        <input type="checkbox" value="remember-me"> Remember me
-                    </label>
-                </div>
-                <button class="w-100 btn" type="submit">Sign up</button>
+                <button class="w-100 btn" type="submit">$msg.get('login.form.button')</button>
                 <hr class="my-4">
-                <small class="text-muted">By clicking Sign up, you agree to the terms of use.</small>
+                <small class="text-muted">$msg.get('login.form.disclamer')</small>
             </form>
         </div>
     </div>
@@ -46,16 +51,28 @@
     repeat.addEventListener('focus', validateConformation);
     repeat.addEventListener('input', validateConformation);
 
-    function validateConformation(
-
-    'validateConformation'
-    )
-    {
-        if (p1.value != p2.value || p1.value == '' || p2.value == '') {
-            p2.setCustomValidity('Conformation must be same as password');
+    function validateConformation() {
+        console.log("!");
+        if (password.value != repeat.value || password.value == '' || repeat.value == '') {
+            repeat.setCustomValidity('Conformation must be same as password');
         } else {
-            p2.setCustomValidity('');
+            repeat.setCustomValidity('');
         }
     }
+
+    jQuery(document).ready(function () {
+        jQuery("#pass-show-hide").on('click', function (event) {
+            event.preventDefault();
+            if (jQuery('#show_hide_password input').attr("type") == "text") {
+                jQuery('#show_hide_password input').attr('type', 'password');
+                jQuery('#pass-show').hide();
+                jQuery('#pass-hide').show();
+            } else if (jQuery('#show_hide_password input').attr("type") == "password") {
+                jQuery('#show_hide_password input').attr('type', 'text');
+                jQuery('#pass-show').hide();
+                jQuery('#pass-hide').show();
+            }
+        });
+    });
 </script>
 #end

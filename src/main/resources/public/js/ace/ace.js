@@ -470,7 +470,7 @@ ace.define('ace/lib/es5-shim', ['require', 'exports', 'module'], function (requi
                 i = -1,
                 length = self.length >>> 0;
             if (_toString(fun) != "[object Function]") {
-                throw new TypeError(); // TODO message
+                throw new TypeError();
             }
 
             while (++i < length) {
@@ -1768,7 +1768,7 @@ ace.define('ace/editor', ['require', 'exports', 'module', 'ace/lib/fixoldbrowser
         this.$initOperationListeners = function () {
             function last(a) {
                 return a[a.length - 1]
-            };
+            }
 
             this.selections = [];
             this.commands.on("exec", function (e) {
@@ -3828,7 +3828,7 @@ ace.define('ace/keyboard/textinput', ['require', 'exports', 'module', 'ace/lib/e
             var timer = setTimeout(function () {
                 var str = text.value.replace(/\x01/g, "");
                 if (inComposition)
-                    return
+
                 else if (str == c.lastValue)
                     resetValue();
                 else if (!c.lastValue && str) {
@@ -7019,7 +7019,7 @@ ace.define('ace/edit_session', ['require', 'exports', 'module', 'ace/lib/oop', '
                 c >= 0xFE68 && c <= 0xFE6B ||
                 c >= 0xFF01 && c <= 0xFF60 ||
                 c >= 0xFFE0 && c <= 0xFFE6;
-        };
+        }
 
     }).call(EditSession.prototype);
 
@@ -7184,7 +7184,7 @@ ace.define('ace/selection', ['require', 'exports', 'module', 'ace/lib/oop', 'ace
                 this.moveCursorTo(this.lead.row, this.lead.column + columns);
                 return;
             }
-            ;
+
 
             var anchor = this.getSelectionAnchor();
             var lead = this.getSelectionLead();
@@ -7822,7 +7822,7 @@ ace.define('ace/range', ['require', 'exports', 'module'], function (require, exp
                 if (row === this.start.row) {
                     return column < this.start.column ? -1 : (column > this.end.column ? 1 : 0);
                 }
-                ;
+
             }
 
             if (row < this.start.row)
@@ -8126,7 +8126,7 @@ ace.define('ace/mode/text', ['require', 'exports', 'module', 'ace/tokenizer', 'a
                     }
                     token = iterator.stepBackward();
                 }
-                ;
+
 
                 var iterator = new TokenIterator(session, cursor.row, cursor.column);
                 var token = iterator.getCurrentToken();
@@ -8730,7 +8730,7 @@ ace.define('ace/mode/text_highlight_rules', ['require', 'exports', 'module', 'ac
                         delete rule.defaultToken;
                     }
                 }
-            };
+            }
             Object.keys(rules).forEach(processState, this);
         };
 
@@ -8874,7 +8874,7 @@ ace.define('ace/unicode', ['require', 'exports', 'module'], function (require, e
         var codePoint = /\w{4}/g;
         for (var name in pack)
             exports.packages[name] = pack[name].replace(codePoint, "\\u$&");
-    };
+    }
 
 });
 
@@ -11459,7 +11459,7 @@ ace.define('ace/keyboard/hash_handler', ['require', 'exports', 'module', 'ace/li
         }
 
         this.addCommands(config);
-    };
+    }
 
     (function () {
 

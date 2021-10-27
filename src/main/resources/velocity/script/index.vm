@@ -4,7 +4,7 @@
 
     <div class="card-list">
         <div class="card-list-head">
-            <h3>Scripts</h3>
+            <h3>$msg.get("database.script.title")</h3>
         </div>
         <div class="card-list-body card-task">
 
@@ -39,21 +39,21 @@
                     </div>
                 #end
             #else
-                <p>Currently you have no one script</p>
+                <p>$msg.get("database.script.empty")</p>
             #end
         </div>
     </div>
 </div>
 
 <div class="container">
-    <h3>New scripts</h3>
+    <h3>$msg.get("database.backup.form.title")</h3>
     <form action="/database/$database.name/script/" method="post" class="shadow border" enctype="multipart/form-data">
-        <input name="_csrf" value="$csrf" type="hidden"/>
+        <input name="_csrf" value="$!csrf" type="hidden"/>
         <div class="form-floating mb-3">
             <input type="file" name="file">
 
         </div>
-        <button class="w-100 btn" type="submit">Upload new script</button>
+        <button class="w-100 btn" type="submit">$msg.get("database.script.form.upload_button")</button>
     </form>
 </div>
 #end

@@ -1,6 +1,7 @@
 package edu.sumdu.tss.elephant.controller;
 
 import edu.sumdu.tss.elephant.helper.Keys;
+import edu.sumdu.tss.elephant.helper.utils.MessageBundle;
 import edu.sumdu.tss.elephant.model.Database;
 import edu.sumdu.tss.elephant.model.User;
 import io.javalin.Javalin;
@@ -27,6 +28,19 @@ public abstract class AbstractController {
 
     public static Database currentDB(final Context context) {
         return context.sessionAttribute(Keys.DB_KEY);
+    }
+
+    //TODO: move this to/from currentModel
+    public static MessageBundle currentMessages(final Context context) {
+        MessageBundle mb = null;
+        var model = currentModel(context);
+        if (model != null) {
+            mb = (MessageBundle) model.get("msg");
+        }
+        if (mb == null) {
+            mb = new MessageBundle(Keys.get("DEFAULT_LANG"));
+        }
+        return mb;
     }
 
     public static Map<String, Object> currentModel(Context context) {

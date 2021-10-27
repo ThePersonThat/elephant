@@ -2,25 +2,25 @@
     <li class="nav-item">
         <a class="nav-link active" aria-current="page" href="/database/$database.name/table">
             <ion-icon name="file-tray-stacked-outline"></ion-icon>
-            Tables
+            $msg.get("database.explorier.title")
         </a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="/database/$database.name/point">
             <ion-icon name="file-tray-stacked-outline"></ion-icon>
-            Backups
+            $msg.get("database.backup.title")
         </a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="/database/$database.name/script">
             <ion-icon name="receipt-outline"></ion-icon>
-            Scripts
+            $msg.get("database.script.title")
         </a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="/database/$database.name/sql">
             <ion-icon name="code-slash-outline"></ion-icon>
-            SQL
+            $msg.get("database.console.title")
         </a>
     </li>
 </ul>

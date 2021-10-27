@@ -7,7 +7,9 @@ import edu.sumdu.tss.elephant.helper.enums.Lang;
 import edu.sumdu.tss.elephant.helper.exception.HttpError500;
 import edu.sumdu.tss.elephant.helper.exception.NotFoundException;
 import edu.sumdu.tss.elephant.helper.utils.ExceptionUtils;
+import edu.sumdu.tss.elephant.helper.utils.MessageBundle;
 import edu.sumdu.tss.elephant.helper.utils.StringUtils;
+import edu.sumdu.tss.elephant.helper.utils.ValidatorHelper;
 import edu.sumdu.tss.elephant.model.DbUserService;
 import edu.sumdu.tss.elephant.model.User;
 import edu.sumdu.tss.elephant.model.UserService;
@@ -15,7 +17,9 @@ import io.javalin.Javalin;
 import io.javalin.http.Context;
 
 import javax.mail.MessagingException;
+import java.util.Objects;
 import java.util.Optional;
+
 
 public class RegistrationController extends AbstractController {
 
@@ -30,29 +34,33 @@ public class RegistrationController extends AbstractController {
     }
 
     public static void create(Context context) {
+        MessageBundle mb = currentMessages(context);
         try {
             String lang = (String) Optional.ofNullable(context.sessionAttribute(Keys.LANG_KEY)).orElse(Keys.get("DEFAULT_LANG"));
             User newUser = UserService.newDefaultUser();
-            newUser.setLogin(context.formParam("login"));
-            newUser.setPassword(context.formParam("password"));
+            var login = context.formParamAsClass("login", String.class)
+                    .check(Objects::nonNull, mb.get("validation.mail.empty"))
+                    .check(ValidatorHelper::isValidMail, mb.get("validation.mail.invalid"))
+                    .get();
+            newUser.setLogin(login);
+            var password = context.formParamAsClass("password", String.class)
+                    .check(it -> it != null || !it.isBlank(), mb.get("validation.password.empty"))
+                    .check(ValidatorHelper::isValidPassword, mb.get("validation.password.invalid"))
+                    .get();
+            newUser.setPassword(password);
+
             newUser.setLanguage(lang);
             UserService.save(newUser);
             UserService.initUserStorage(newUser.getUsername());
             context.sessionAttribute("currentUser", newUser);
             DbUserService.initUser(newUser.getUsername(), newUser.getDbPassword());
-            System.out.println("Before send mails");
             MailService.sendActivationLink(newUser.getToken(), newUser.getLogin(), Lang.byValue(lang));
-            System.out.println("After Send mail");
         } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-            ex.printStackTrace();
-            String cause;
             if (ExceptionUtils.isSQLUniqueException(ex)) {
-                cause = "Login (email) already taken";
+                context.sessionAttribute(Keys.ERROR_KEY, "Login (email) already taken");
             } else {
-                cause = ex.getMessage();
+                ExceptionUtils.wrapError(context, ex);
             }
-            context.sessionAttribute(Keys.ERROR_KEY, cause);
             context.redirect(BASIC_PAGE);
             return;
         }
@@ -92,6 +100,5 @@ public class RegistrationController extends AbstractController {
         app.get(BASIC_PAGE, RegistrationController::show, UserRole.ANYONE);
         app.post(BASIC_PAGE, RegistrationController::create, UserRole.ANYONE);
     }
-
 
 }

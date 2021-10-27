@@ -1,18 +1,14 @@
 #parse("/velocity/db_layout.vm")
 #@dbLayout()
 <div class="container">
-    $databaseSize
-</div>
-<div class="container">
     <div class="row row-cols-1 row-cols-md-2 g-4">
         <div class="col">
             <div class="card">
                 <a class="nav-link active" aria-current="page" href="/database/$database.name/table">
                     <ion-icon name="file-tray-stacked-outline"></ion-icon>
                     <div class="card-body">
-                        <h5 class="card-title">Tables</h5>
-                        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to
-                            additional content. This content is a little bit longer.</p>
+                        <h5 class="card-title">$msg.get("database.explorier.title")</h5>
+                        <p class="card-text">$msg.get("database.explorier.description")</p>
                     </div>
                 </a>
             </div>
@@ -22,9 +18,8 @@
                 <a class="nav-link active" aria-current="page" href="/database/$database.name/point">
                     <ion-icon name="file-tray-stacked-outline"></ion-icon>
                     <div class="card-body">
-                        <h5 class="card-title">Backups</h5>
-                        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to
-                            additional content. This content is a little bit longer.</p>
+                        <h5 class="card-title">$msg.get("database.backup.title")</h5>
+                        <p class="card-text">$msg.get("database.explorier.description")</p>
                     </div>
                 </a>
             </div>
@@ -34,9 +29,8 @@
                 <a class="nav-link active" aria-current="page" href="/database/$database.name/script">
                     <ion-icon name="receipt-outline"></ion-icon>
                     <div class="card-body">
-                        <h5 class="card-title">Scripts</h5>
-                        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to
-                            additional content. This content is a little bit longer.</p>
+                        <h5 class="card-title">$msg.get("database.script.title")</h5>
+                        <p class="card-text">$msg.get("database.script.description")</p>
                     </div>
                 </a>
             </div>
@@ -46,9 +40,8 @@
                 <a class="nav-link active" aria-current="page" href="/database/$database.name/sql">
                     <ion-icon name="code-slash-outline"></ion-icon>
                     <div class="card-body">
-                        <h5 class="card-title">Tables</h5>
-                        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to
-                            additional content. This content is a little bit longer.</p>
+                        <h5 class="card-title">$msg.get("database.console.title")</h5>
+                        <p class="card-text">$msg.get("database.table.description")</p>
                     </div>
                 </a>
             </div>

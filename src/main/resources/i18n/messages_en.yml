@@ -1,10 +1,96 @@
 controls:
-  buttons:
-    ok: ok
-    cancel: cancel
+  button:
+    ok: Ok
+    cancel: Cancel
+    run: Run
+    reset: Reset
+    delete: Delete
+    sign_in: "Sign In"
+    sign_up: "Sign Up"
+    logout: "Logout"
+registration:
+  form:
+    email: "Email address"
+    password: "Password"
+    password_c: "Password conformation"
+    button: "Sign in"
 login:
-  SignIn: Sign me in, please
-regisgter:
-  messages2: text
+  SignIn: "Sign me in, please"
+  form:
+    email: "Email address"
+    password: "Password"
+    remember_me: "Remember me"
+    forgot: "Forgot password?"
+    disclamer: "By clicking Sign in, you agree to the terms of use."
+  reset:
+    title: "Identify yourself"
+    email: "Your email"
+    email_helper: "Email (username) of your user"
+    button: "Send link for password recovery"
+    success_send: "Mail with conformation link was sent. Check yor mailbox."
+    success_reset: "Password has been reset"
+  reset_password:
+    title: "Chose new password"
+    password: "Password"
+    password_helper: "Password for web user"
+    password_c: "Password conformation"
+    password_c_helper: "Repeat same password"
+    button: "Reset bassword"
 mail:
   conformation: "Elephant: Welcome to the club buddy"
+validation:
+  mail:
+    empty: "Mail can't be empty"
+    invalid: "Is it a valid mail?"
+  password:
+    empty: "Password can't be empty"
+    invalid: "Password should be at least 8 symbols,  with at least 1 digit, 1 uppercase letter and 1 non alpha-num symbol"
+  token:
+    empty: "Token can't be empty"
+  user:
+    not_found: "User or password not known"
+    not_found_token: "Unknown or invalid token"
+    not_uniq: "The user with such email address has been already registered. Please fill out another email address"
+dashboard:
+  dashboard:
+    title: "Dashboard"
+  profile:
+    title: "Profile"
+  jumbotron:
+    title: "Hi, newcomer!"
+    message: "Check your mail and push mail-verification link - to be able create new database."
+    button: "Resend mail"
+database:
+  title: "Databases"
+  empty: "Currently you have no one database"
+  form:
+    create_button: "Create new database"
+    approve: "You need to approve you email before can create new DB"
+    limits: "You reach you DB limit - delete one or upgrade plan."
+  explorier:
+    title: "Explore"
+    description: "Investigate your database. Look to your data from browser."
+  script:
+    title: "Scripts"
+    description: "Seed yor database with your or shared scripts"
+    empty: "Currently you have no one script"
+    form:
+      title: "New scripts"
+      upload_button: "Upload new script"
+    run:
+      statement: "Statement"
+      result: "Result"
+  console:
+    title: "SQL console"
+    description: "Run sql commands directly from browser."
+  backup:
+    title: "Backup"
+    description: "Maintain you database with backup points"
+    empty: "Currently you have no one backups on this database"
+    form:
+      title: "New backup"
+      name: "Backup Name"
+      limit: "You reach you limit - delete one or upgrade plan."
+      create_button: "Create new backup"
+error:
+  back: "Back and try again"

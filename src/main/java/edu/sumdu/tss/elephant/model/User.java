@@ -17,13 +17,21 @@ public class User {
     private String token;
     private String language;
 
-    //TODO: crypt it
+
+    public String getPassword() {
+        return this.password;
+    }
+
     public void setPassword(String password) {
-        this.password = password;
+        this.password = crypt(password);
     }
 
     public UserRole role() {
         return UserRole.byValue(role);
     }
 
+    //TODO: Crypt!
+    public String crypt(String source) {
+        return source;
+    }
 }

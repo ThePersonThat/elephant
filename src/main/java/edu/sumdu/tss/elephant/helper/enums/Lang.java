@@ -1,7 +1,7 @@
 package edu.sumdu.tss.elephant.helper.enums;
 
 public enum Lang {
-    EN, UA;
+    EN, UK;
 
     public static Lang byValue(String value) {
         for (Lang lang : Lang.values()) {

@@ -3,13 +3,13 @@ package edu.sumdu.tss.elephant.model;
 import edu.sumdu.tss.elephant.helper.DBPool;
 import edu.sumdu.tss.elephant.helper.utils.CmdUtil;
 import edu.sumdu.tss.elephant.helper.utils.ParameterizedStringFactory;
+import io.javalin.core.util.JavalinLogger;
 
 import java.io.File;
 
 public class DbUserService {
 
     private static final ParameterizedStringFactory CREATE_USER_SQL = new ParameterizedStringFactory("CREATE USER :name WITH PASSWORD ':password' CONNECTION LIMIT 5 IN ROLE customer;");
-    private static final ParameterizedStringFactory RESET_USER_SQL = new ParameterizedStringFactory("ALTER USER :name SET PASSWORD = :password");
     private static final ParameterizedStringFactory DELETE_USER_SQL = new ParameterizedStringFactory("DROP USER :name");
 
     public static void initUser(String username, String password) {
@@ -29,8 +29,13 @@ public class DbUserService {
         //DatabaseService.create(dbName, username, username);
     }
 
+    //TODO: SQL injection here!
+    private static final ParameterizedStringFactory RESET_USER_SQL = new ParameterizedStringFactory("ALTER USER :name WITH PASSWORD ':password'");
+
     public static void dbUserPasswordReset(String name, String password) {
-        DBPool.getConnection().open().createQuery(RESET_USER_SQL.addParameter("name", name).toString(), false).addParameter("password", password).executeUpdate();
+        String query = RESET_USER_SQL.addParameter("name", name).addParameter("password", password).toString();
+        JavalinLogger.info(query);
+        DBPool.getConnection().open().createQuery(query, false).executeUpdate();
     }
 
     public static void dropUser(String name) {

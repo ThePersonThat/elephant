@@ -14,12 +14,11 @@
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/dashboard.css" rel="stylesheet">
     <script src="/js/chart.min.js"></script>
+    <script src="/js/jquery.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule="" src="https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.js"></script>
 </head>
 <body>
-
-
 <header class="navbar  sticky-top flex-md-nowrap px-5 ">
     <a class="logotype logotype-font navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">
         <img src='/images/logo-bw.png' alt="logo">

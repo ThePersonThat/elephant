@@ -120,26 +120,9 @@ public class SqlController extends AbstractController {
         }
     }
 
-    //FIXME: anyone can run a script
     public void register(Javalin app) {
         app.get(BASIC_PAGE, SqlController::show, UserRole.AUTHED);
         app.post(BASIC_PAGE, SqlController::run);
     }
-
-/*
-    String query = request.getParameter("query");
-if (StringUtils.trimToNull(query) != null) {
-
-        long start = System.currentTimeMillis();
-        out.clear();
-        try {
-            out.print( executeQuery(query) );
-        } catch (SQLException e) {
-            out.print();
-        }
-        out.print("<p>Execution (ms): " + (System.currentTimeMillis() - start) + "</p>" );
-    }
-%>
-*/
 
 }

@@ -23,7 +23,11 @@ public class MessageBundle {
     }
 
     public String get(String message) {
-        return messages.getString(message);
+        try {
+            return messages.getString(message);
+        } catch (RuntimeException ex) {
+            return "I18n not found:" + message;
+        }
     }
 
     public final String get(final String key, final Object... args) {

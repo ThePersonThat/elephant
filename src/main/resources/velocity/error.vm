@@ -8,7 +8,7 @@
         <div class="col-md-10 mx-auto col-lg-8">
             <h1>$code</h1>
             <p>$message</p>
-            <a href="#" onclick="window.history.back();">Back and try again</a>
+            <a href="#" onclick="window.history.back();">$msg.get("error.back")</a>
             #if ($stacktrace)
                 <pre>$stacktrace</pre>
             #end

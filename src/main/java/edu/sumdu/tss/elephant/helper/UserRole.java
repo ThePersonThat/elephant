@@ -50,7 +50,7 @@ public enum UserRole implements RouteRole {
         }
 
         public long maxStorage() {
-            return 5 * FileUtils.ONE_MB;
+            return 20 * FileUtils.ONE_MB;
         }
 
         public long maxBackupsPerDB() {
@@ -67,7 +67,7 @@ public enum UserRole implements RouteRole {
         }
 
         public long maxStorage() {
-            return 20 * FileUtils.ONE_MB;
+            return 100 * FileUtils.ONE_MB;
         }
 
         public long maxBackupsPerDB() {

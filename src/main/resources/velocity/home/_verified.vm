@@ -1,6 +1,6 @@
 <div class="container">
     <div class="row">
-        <div class="card">
+        <div class="card col-6 m-6">
             <div class="d-flex card-body">
                 <div class="align-items-center row">
                     <div class="mb-4 mb-sm-0 col-sm-5">
@@ -18,26 +18,51 @@
                 </div>
             </div>
         </div>
-        <script>
-            let spaceChart = document.getElementById("spaceChart");
-            if (spaceChart) {
-                new Chart(spaceChart, {
-                    type: 'doughnut',
-                    data: {
-                        datasets: [
-                            {
-                                label: "Space",
-                                backgroundColor: ["#3e95cd", "White"],
-                                data: [$spacePercent, 100 -$spacePercent]
-                            }
-                        ]
-                    },
-                    options: {
-                        title: {display: false}
-                    }
-                });
+        <div class="card col-6 m-6">
+            <div class="d-flex card-body">
+                <div class="align-items-center row">
+                    <div class="mb-4 mb-sm-0 col-sm-5">
+                        <h2 class="mb-0 d-flex align-items-center">
+                            <span>$bases.size()</span><span
+                                class="dot bg-pink d-inline-block ms-3"></span></h2><span
+                            class="text-muted text-uppercase small">Bases</span>
+                        <hr>
+                        <small class="text-muted">created from $currentUser.role().maxDB() in your plan</small></div>
+                    <div class="col-sm-7">
+                        <canvas id="dbChart"
+                                style="display: block; box-sizing: border-box; height: 146px; width: 292px;" width="292"
+                                height="146"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <script>
+
+            function doughnut(element, value, label) {
+                let chart = document.getElementById(element);
+                if (chart) {
+                    new Chart(chart, {
+                        type: 'doughnut',
+                        data: {
+                            datasets: [
+                                {
+                                    label: label,
+                                    backgroundColor: ["#3e95cd", "White"],
+                                    data: [Math.min(value, 100), Math.max(100 - value, 0)]
+                                }
+                            ]
+                        },
+                        options: {
+                            title: {display: false}
+                        }
+                    });
+
+                }
             }
+
+            doughnut('spaceChart', $spacePercent, "Disk space");
+            doughnut('dbChart', 100 *$bases.size()/ Math.max($currentUser.role().maxDB(), 1), "Disk space");
         </script>
     </div>
 </div>
