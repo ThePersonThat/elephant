@@ -22,11 +22,6 @@ public class DbUserService {
         String path = UserService.userStoragePath(username);
         System.out.println("Tablespace path:" + path);
         UserService.createTablespace(username, path + File.separator + "tablespace");
-
-        //Create database
-        //TODO: move to role change
-        //String dbName = StringUtils.randomAlphaString(8);
-        //DatabaseService.create(dbName, username, username);
     }
 
     //TODO: SQL injection here!

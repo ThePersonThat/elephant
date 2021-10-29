@@ -93,9 +93,9 @@ public class MailService {
             String lang = langCode.toString().toLowerCase();
             String resourceName = StringUtils.replaceLast(resource, ".", "_" + lang + ".");
             JavalinLogger.info(resourceName);
-            URL url = Resources.getResource(resourceName);
+            @SuppressWarnings("UnstableApiUsage") URL url = Resources.getResource(resourceName);
             JavalinLogger.info(url.toString());
-            String result = Resources.toString(url, StandardCharsets.UTF_8);
+            @SuppressWarnings("UnstableApiUsage") String result = Resources.toString(url, StandardCharsets.UTF_8);
             JavalinLogger.info(result);
             return result;
         } catch (IOException e) {

@@ -2,7 +2,6 @@ package edu.sumdu.tss.elephant.controller;
 
 import edu.sumdu.tss.elephant.helper.UserRole;
 import edu.sumdu.tss.elephant.helper.ViewHelper;
-import edu.sumdu.tss.elephant.helper.utils.ParameterizedStringFactory;
 import edu.sumdu.tss.elephant.model.Backup;
 import edu.sumdu.tss.elephant.model.BackupService;
 import io.javalin.Javalin;
@@ -11,7 +10,6 @@ import io.javalin.http.Context;
 public class BackupController extends AbstractController {
 
     public static final String BASIC_PAGE = "/database/{database}/point/";
-    private static final ParameterizedStringFactory DEFAULT_CRUMB = new ParameterizedStringFactory("<a href='/database/:database/point'>Backups</a>");
 
     public BackupController(Javalin app) {
         super(app);

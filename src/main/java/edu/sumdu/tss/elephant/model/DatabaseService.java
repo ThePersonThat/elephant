@@ -38,7 +38,6 @@ public class DatabaseService {
 
     public static Integer size(String database) {
         return DBPool.getConnection().open().createQuery(DB_SIZE).addParameter("database", database).executeScalar(Integer.class);
-
     }
 
     public static void create(String dbName, String owner, String tablespace) {

@@ -13,7 +13,7 @@ registration:
     email: "Email address"
     password: "Password"
     password_c: "Password conformation"
-    button: "Sign in"
+    button: "Sign up"
 login:
   SignIn: "Sign me in, please"
   form:
@@ -22,6 +22,8 @@ login:
     remember_me: "Remember me"
     forgot: "Forgot password?"
     disclamer: "By clicking Sign in, you agree to the terms of use."
+    password_c: "Password conformation"
+    button: "Sign in"
   reset:
     title: "Identify yourself"
     email: "Your email"

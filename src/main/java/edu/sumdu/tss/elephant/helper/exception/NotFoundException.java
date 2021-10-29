@@ -6,16 +6,8 @@ public class NotFoundException extends HttpError400 {
         super(message);
     }
 
-    public NotFoundException(Class klass, String condition) {
-        super("Not found " + klass + " by condition " + condition);
-    }
-
-    public NotFoundException(Class klass, int id) {
-        super("Not found " + klass + " by ID " + id);
-    }
-
     public Integer getCode() {
-        return Integer.valueOf(404);
+        return 404;
     }
 
 }

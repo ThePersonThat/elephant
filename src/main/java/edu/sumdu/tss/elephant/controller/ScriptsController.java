@@ -4,11 +4,9 @@ import edu.sumdu.tss.elephant.helper.DBPool;
 import edu.sumdu.tss.elephant.helper.Pair;
 import edu.sumdu.tss.elephant.helper.ViewHelper;
 import edu.sumdu.tss.elephant.helper.exception.AccessRestrictedException;
-import edu.sumdu.tss.elephant.helper.exception.HttpError400;
 import edu.sumdu.tss.elephant.helper.exception.HttpError500;
 import edu.sumdu.tss.elephant.helper.exception.NotFoundException;
 import edu.sumdu.tss.elephant.helper.sql.ScriptReader;
-import edu.sumdu.tss.elephant.helper.utils.ParameterizedStringFactory;
 import edu.sumdu.tss.elephant.helper.utils.StringUtils;
 import edu.sumdu.tss.elephant.model.Script;
 import edu.sumdu.tss.elephant.model.ScriptService;
@@ -26,7 +24,6 @@ import java.util.ArrayList;
 public class ScriptsController extends AbstractController {
 
     public static final String BASIC_PAGE = "/database/{database}/script/";
-    private static final ParameterizedStringFactory DEFAULT_CRUMB = new ParameterizedStringFactory("<a href='/database/:database/script/'>Scripts</a>");
 
     public ScriptsController(Javalin app) {
         super(app);
@@ -44,6 +41,7 @@ public class ScriptsController extends AbstractController {
                 File.separator + StringUtils.randomAlphaString(20);
         var destinationFile = new File(path);
         try {
+            assert file != null;
             FileUtils.forceMkdirParent(destinationFile);
             FileUtils.copyInputStreamToFile(file.getContent(), destinationFile);
         } catch (IOException ex) {
@@ -83,7 +81,7 @@ public class ScriptsController extends AbstractController {
     private static void run(Context context) {
         Statement statement = null;
         Connection connection = null;
-        ArrayList<Pair<String, String>> list = new ArrayList(500);
+        var list = new ArrayList<Pair<String, String>>(500);
         try {
             String database = context.pathParam("database");
             String scriptId = context.pathParam("script");
@@ -94,9 +92,8 @@ public class ScriptsController extends AbstractController {
             connection = DBPool.getConnection(database).open().getJdbcConnection();
             statement = connection.createStatement();
             while ((line = sr.readStatement()) != null) {
-                System.out.println(line);
-                System.out.println("----");
-                try (var rs = statement.executeQuery(line)) {
+                try {
+                    statement.executeQuery(line);
                     result = "ok";
                 } catch (SQLException ex) {
                     result =
@@ -104,12 +101,10 @@ public class ScriptsController extends AbstractController {
                                     ex.getErrorCode() +
                                     ex.getMessage();
                 }
-                list.add(new Pair<String, String>(line, result));
+                list.add(new Pair<>(line, result));
             }
         } catch (FileNotFoundException ex) {
             throw new HttpError500(ex);
-        } catch (IOException ex) {
-            throw new HttpError400(ex);
         } catch (SQLException ex) {
             throw new HttpError500("Problem with database connection", ex);
         } finally {

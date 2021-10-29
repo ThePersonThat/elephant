@@ -14,12 +14,8 @@ public class HttpError400 extends HttpException {
         super(message);
     }
 
-    public HttpError400(String message, Exception ex) {
-        super(message, ex);
-    }
-
     public Integer getCode() {
-        return Integer.valueOf(500);
+        return 400;
     }
 
 }

@@ -19,11 +19,11 @@ public class BackupService {
     private static final String LIST_BACKUP_SQL = "SELECT * from backups where database = :database";
     private static final String GET_BY_NAME_SQL = "SELECT * from backups where database = :database and point = :point";
     private static final String INSERT_SQL =
-            "insert into backups(database, point, status, \"createdAt\", \"updatedAt\") " +
-                    "values (:database, :point, :status, :createdAt, :updatedAt)" +
-                    "ON CONFLICT(database, point) DO UPDATE \n" +
-                    "  SET status = excluded.status, \n" +
-                    "      \"updatedAt\" = now();";
+            """
+                    insert into backups(database, point, status, "createdAt", "updatedAt")
+                    values (:database, :point, :status, :createdAt, :updatedAt)  ON CONFLICT(database, point) DO UPDATE\s
+                    SET status = excluded.status,\s
+                       "updatedAt" = now();""";
     private static final String DELETE_BACKUP = "DELETE FROM backups WHERE database = :database and point = :point;";
     private static final ParameterizedStringFactory DROP_DB = new ParameterizedStringFactory("DROP DATABASE :database WITH (FORCE);");
 
@@ -102,7 +102,9 @@ public class BackupService {
                 .addParameter("database", database)
                 .addParameter("point", point)
                 .executeUpdate();
-        new File(path).delete();
+        if (!new File(path).delete()) {
+            throw new RuntimeException("File not deleted");
+        }
     }
 
     private static void createBackup(String owner, String database, String pointName) {
@@ -122,10 +124,9 @@ public class BackupService {
     }
 
     public static String filePath(String owner, String database, String pointName) {
-        String path = UserService.userStoragePath(owner) +
+        return UserService.userStoragePath(owner) +
                 File.separator + "backups" +
                 File.separator + database +
                 File.separator + pointName;
-        return path;
     }
 }

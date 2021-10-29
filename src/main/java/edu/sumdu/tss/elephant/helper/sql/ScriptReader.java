@@ -21,6 +21,7 @@ import java.util.Arrays;
  * Each SQL statement ends with the character ';', however it is ignored
  * in comments and quotes.
  */
+@SuppressWarnings("UnnecessaryBreak")
 public class ScriptReader implements Closeable {
 
     private final Reader reader;
@@ -120,7 +121,7 @@ public class ScriptReader implements Closeable {
                 break;
             }
             switch (c) {
-                case '$': {
+                case '$' -> {
                     c = read();
                     if (c == '$' && (bufferPos - bufferStart < 3 || buffer[bufferPos - 3] <= ' ')) {
                         // dollar quoted string
@@ -143,7 +144,7 @@ public class ScriptReader implements Closeable {
                     }
                     break;
                 }
-                case '\'':
+                case '\'' -> {
                     while (true) {
                         c = read();
                         if (c < 0) {
@@ -154,8 +155,8 @@ public class ScriptReader implements Closeable {
                         }
                     }
                     c = read();
-                    break;
-                case '"':
+                }
+                case '"' -> {
                     while (true) {
                         c = read();
                         if (c < 0) {
@@ -166,8 +167,8 @@ public class ScriptReader implements Closeable {
                         }
                     }
                     c = read();
-                    break;
-                case '/': {
+                }
+                case '/' -> {
                     c = read();
                     if (c == '*') {
                         // block comment
@@ -220,7 +221,7 @@ public class ScriptReader implements Closeable {
                     }
                     break;
                 }
-                case '-': {
+                case '-' -> {
                     c = read();
                     if (c == '-') {
                         // single line comment
@@ -240,9 +241,7 @@ public class ScriptReader implements Closeable {
                     }
                     break;
                 }
-                default: {
-                    c = read();
-                }
+                default -> c = read();
             }
         }
         return new String(buffer, bufferStart, bufferPos - 1 - bufferStart);

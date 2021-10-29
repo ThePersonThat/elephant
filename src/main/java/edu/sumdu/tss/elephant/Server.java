@@ -45,15 +45,11 @@ public class Server {
                 //TODO: fix this: csrf checking work only for '/'
                 .before("/", CSRFFilter::check)
                 .before("/", CSRFFilter::generate)
-                .before(context -> {
-                    JavalinLogger.info("[" + context.method() + "] " + context.url());
-                })
+                .before(context -> JavalinLogger.info("[" + context.method() + "] " + context.url()))
                 .before(ViewHelper::defaultVariables)
                 .after(ViewHelper::cleanupSession)
                 .exception(HttpException.class, ViewHelper::userError)
-                .exception(Exception.class, (e, ctx) -> {
-                    ViewHelper.userError(new HttpException(e), ctx);
-                });
+                .exception(Exception.class, (e, ctx) -> ViewHelper.userError(new HttpException(e), ctx));
         new ApiController(app);
         new BackupController(app);
         new DatabaseController(app);

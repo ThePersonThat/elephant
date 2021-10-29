@@ -1,9 +1,6 @@
 package edu.sumdu.tss.elephant.helper.exception;
 
 public class BackupException extends HttpError500 {
-    public BackupException() {
-        super();
-    }
 
     public BackupException(Exception ex) {
         super(ex);

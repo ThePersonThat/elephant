@@ -3,13 +3,7 @@ package edu.sumdu.tss.elephant.helper.utils;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ParameterizedStringFactory {
-
-    private final String template;
-
-    public ParameterizedStringFactory(String template) {
-        this.template = template;
-    }
+public record ParameterizedStringFactory(String template) {
 
     public ParameterizedString addParameter(String key, String value) {
         ParameterizedString query = new ParameterizedString(template);
@@ -21,9 +15,9 @@ public class ParameterizedStringFactory {
         return template;
     }
 
-    public class ParameterizedString {
+    public static class ParameterizedString {
         private final HashMap<String, String> params = new HashMap<>();
-        String template;
+        final String template;
 
         public ParameterizedString(String template) {
             this.template = template;

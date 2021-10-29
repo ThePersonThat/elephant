@@ -22,9 +22,7 @@ public class DatabaseController extends AbstractController {
     }
 
     public static void show(Context context) {
-        Database database = currentDB(context);
-        var model = currentModel(context);
-        context.render("/velocity/database/show.vm", model);
+        context.render("/velocity/database/show.vm", currentModel(context));
     }
 
     public static void create(Context context) {
@@ -37,11 +35,10 @@ public class DatabaseController extends AbstractController {
     }
 
     public static void delete(Context context) {
-        User user = currentUser(context);
         Database database = currentDB(context);
         DatabaseService.drop(database);
-        LogService.push(context, database.getName(), "Database droped");
-        context.sessionAttribute(Keys.INFO_KEY, "Database droped");
+        LogService.push(context, database.getName(), "Database has been dropped");
+        context.sessionAttribute(Keys.INFO_KEY, "Database has been dropped");
         context.redirect(HomeController.BASIC_PAGE);
     }
 

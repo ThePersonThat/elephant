@@ -58,7 +58,7 @@ public class ProfileController extends AbstractController {
         user.setPrivateKey(StringUtils.randomAlphaString(20));
         user.setPublicKey(StringUtils.randomAlphaString(20));
         UserService.save(user);
-        context.sessionAttribute(Keys.INFO_KEY, "API keys was reseted successful");
+        context.sessionAttribute(Keys.INFO_KEY, "API keys was reset successful");
         context.redirect(BASIC_PAGE);
     }
 

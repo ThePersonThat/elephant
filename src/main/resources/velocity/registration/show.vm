@@ -15,10 +15,10 @@
                 <div class="form-floating mb-3">
                     <input type="email" name="login" class="form-control" id="email"
                            placeholder="name@example.com">
-                    <label for="email">$msg.get('login.form.email')</label>
+                    <label for="email">$msg.get('registration.form.email')</label>
                 </div>
                 <div class="form-floating mb-3">
-                    <label for="password">$msg.get('login.form.password')</label>
+                    <label for="password">$msg.get('registration.form.password')</label>
                     <div class="input-group mb-3" id="show_hide_password">
                         <input type="password" name="password" class="form-control"
                                placeholder="Password" aria-label="Password"
@@ -35,11 +35,11 @@
                 <div class="form-floating mb-3">
                     <input type="password" name="conformation" class="form-control" id="conformation"
                            placeholder="Password">
-                    <label for="conformation">$msg.get('login.form.password_c')</label>
+                    <label for="conformation">$msg.get('registration.form.password_c')</label>
                 </div>
-                <button class="w-100 btn" type="submit">$msg.get('login.form.button')</button>
+                <button class="w-100 btn" type="submit">$msg.get('registration.form.button')</button>
                 <hr class="my-4">
-                <small class="text-muted">$msg.get('login.form.disclamer')</small>
+                <small class="text-muted">$msg.get('registration.form.disclamer')</small>
             </form>
         </div>
     </div>

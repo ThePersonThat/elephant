@@ -26,7 +26,7 @@ public class CmdUtil {
 
             int exitVal = pr.waitFor();
             if (exitVal != 0) {
-                new BackupException(result.toString());
+                throw new BackupException(result.toString());
             }
         } catch (IOException | InterruptedException ex) {
             throw (result.length() == 0) ? new BackupException(ex) : new BackupException(result.toString(), ex);

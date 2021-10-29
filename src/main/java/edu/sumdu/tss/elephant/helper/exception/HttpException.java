@@ -20,7 +20,7 @@ public class HttpException extends RuntimeException {
     }
 
     public Integer getCode() {
-        return Integer.valueOf(500);
+        return 500;
     }
 
     public String getIcon() {

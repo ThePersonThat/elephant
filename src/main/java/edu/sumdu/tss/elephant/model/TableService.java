@@ -7,9 +7,10 @@ import org.sql2o.data.Table;
 
 public class TableService {
 
-    private static final String TABLE_LIST_SQL = "SELECT table_name as name\n" +
-            "  FROM information_schema.tables\n" +
-            " WHERE table_type='BASE TABLE';";
+    private static final String TABLE_LIST_SQL = """
+            SELECT table_name as name
+            FROM information_schema.tables
+            WHERE table_type='BASE TABLE';""";
     private static final ParameterizedStringFactory TABLE_PREVIEW_SQL = new ParameterizedStringFactory("select * from :table limit :limit offset :offset");
 
     public static Table list(String database) {

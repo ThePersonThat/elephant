@@ -37,7 +37,7 @@
                         <input type="checkbox" value="remember-me"> $msg.get("login.form.remember_me")
                     </label>
                 </div>
-                <button class="w-100 btn" type="submit">$msg.get("login.SignIn")</button>
+                <button class="w-100 btn" type="submit">$msg.get("login.form.button")</button>
                 <hr class="my-4">
                 <small class="text-muted">$msg.get("login.form.disclamer")</small>
                 <p><a href="/login/reset-password">$msg.get("login.form.forgot")</a></p>

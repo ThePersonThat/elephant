@@ -99,12 +99,12 @@ public enum UserRole implements RouteRole {
     private final Long value;
 
     UserRole(int value) {
-        this.value = Long.valueOf(value);
+        this.value = (long) value;
     }
 
     public static UserRole byValue(long value) {
         for (UserRole role : UserRole.values()) {
-            if (role.value.longValue() == value) {
+            if (role.value == value) {
                 return role;
             }
         }

@@ -21,7 +21,7 @@ public class ResponseUtils {
     }
 
     private static Object message(String state, String message) {
-        var answer = new <String, String>HashMap();
+        HashMap<String, String> answer = new <String, String>HashMap<String, String>();
         answer.put(STATUS_KEY, state);
         answer.put(MESSAGE_KEY, message);
         return answer;

@@ -42,7 +42,7 @@ public class LoginController extends AbstractController {
                     .check(ValidatorHelper::isValidMail, mb.get("validation.mail.invalid"))
                     .get();
             password = context.formParamAsClass("password", String.class)
-                    .check(it -> it != null || !it.isBlank(), mb.get("validation.password.empty"))
+                    .check(it -> it != null && !it.isBlank(), mb.get("validation.password.empty"))
                     .get();
             user = UserService.byLogin(login);
         } catch (NotFoundException ex) {
@@ -96,10 +96,10 @@ public class LoginController extends AbstractController {
         try {
             if (context.method().equals("POST")) {
                 String token = context.formParamAsClass("password", String.class)
-                        .check(it -> it != null || !it.isBlank(), mb.get("validation.token.empty"))
+                        .check(it -> it != null && !it.isBlank(), mb.get("validation.token.empty"))
                         .get();
                 var password = context.formParamAsClass("password", String.class)
-                        .check(it -> it != null || !it.isBlank(), mb.get("validation.password.empty"))
+                        .check(it -> it != null && !it.isBlank(), mb.get("validation.password.empty"))
                         .check(ValidatorHelper::isValidPassword, mb.get("validation.invalid.empty"))
                         .get();
                 var user = UserService.byToken(token);

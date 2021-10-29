@@ -8,8 +8,6 @@ import edu.sumdu.tss.elephant.model.TableService;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
-import java.util.Optional;
-
 /**
  * show DB stats
  **/
@@ -34,15 +32,15 @@ public class TableController extends AbstractController {
     public static void preview_table(Context context) {
         Database database = currentDB(context);
         String tableName = context.pathParam("table");
-        int limit = Integer.valueOf(Optional.ofNullable(context.queryParam("limit")).orElse("10"));
-        int offset = Integer.valueOf(Optional.ofNullable(context.queryParam("offset")).orElse("0"));
+        int limit = context.queryParamAsClass("limit", Integer.class).getOrDefault(10);
+        int offset = context.queryParamAsClass("offset", Integer.class).getOrDefault(1);
         var table = TableService.byName(database.getName(), tableName, limit, offset * limit);
         int size = TableService.getTableSize(database.getName(), tableName);
 
         var model = currentModel(context);
         model.put("table", table);
         model.put("pager", ViewHelper.pager((size / limit) + 1, offset));
-        ViewHelper.breadcrumb(context).add("Tables");
+        ViewHelper.breadcrumb(context).add(DEFAULT_CRUMB.addParameter("database", database.getName()).toString());
         ViewHelper.breadcrumb(context).add(tableName);
         context.render("/velocity/table/show.vm", model);
     }

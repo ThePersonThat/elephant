@@ -44,7 +44,7 @@ public class RegistrationController extends AbstractController {
                     .get();
             newUser.setLogin(login);
             var password = context.formParamAsClass("password", String.class)
-                    .check(it -> it != null || !it.isBlank(), mb.get("validation.password.empty"))
+                    .check(it -> it != null && !it.isBlank(), mb.get("validation.password.empty"))
                     .check(ValidatorHelper::isValidPassword, mb.get("validation.password.invalid"))
                     .get();
             newUser.setPassword(password);

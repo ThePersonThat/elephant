@@ -6,12 +6,12 @@ import edu.sumdu.tss.elephant.helper.UserRole;
 import edu.sumdu.tss.elephant.helper.utils.CmdUtil;
 import edu.sumdu.tss.elephant.helper.utils.ParameterizedStringFactory;
 import edu.sumdu.tss.elephant.helper.utils.StringUtils;
+import io.javalin.core.util.JavalinLogger;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.sql2o.Connection;
 
 import java.io.File;
-import java.util.List;
 
 public class UserService {
 
@@ -36,14 +36,6 @@ public class UserService {
     public static User byLogin(String login) {
         try (Connection con = DBPool.getConnection().open()) {
             return con.createQuery(USER_BY_LOGIN_SQL).addParameter("login", login).executeAndFetchFirst(User.class);
-        }
-    }
-
-    private static final String USER_LIST_SQL = "SELECT id, login, username FROM users";
-
-    public static List<User> list() {
-        try (Connection con = DBPool.getConnection().open()) {
-            return con.createQuery(USER_LIST_SQL).executeAndFetch(User.class);
         }
     }
 
@@ -92,17 +84,7 @@ public class UserService {
                 File subPath = new File(path + File.separator + scope);
                 FileUtils.forceMkdir(subPath);
                 if (scope.equals("tablespace") && !SystemUtils.IS_OS_WINDOWS) {
-                    /*
-                    //Under *nix OS tablespace folder must be ownerd by RDBMS-owner user
-                    Path tablespace = Path.of(subPath.getPath());
-                    FileOwnerAttributeView view = Files.getFileAttributeView(tablespace,
-                            FileOwnerAttributeView.class);
-                    UserPrincipalLookupService lookupService = FileSystems.getDefault()
-                            .getUserPrincipalLookupService();
-                    UserPrincipal userPrincipal = lookupService.lookupPrincipalByName(Keys.get("DB.OS_USER"));
-
-                    Files.setOwner(tablespace, userPrincipal);
-                     */
+                    /* Under *nix OS tablespace folder must be owned by RDBMS-owner user   */
                     CmdUtil.exec(CHANGE_MODE.addParameter("path", subPath.getPath()).toString());
                     CmdUtil.exec(CHANGE_OWNER.addParameter("user", Keys.get("DB.OS_USER")).addParameter("path", subPath.getPath()).toString());
                 }
@@ -116,7 +98,7 @@ public class UserService {
         try {
             return FileUtils.sizeOfDirectory(new File(UserService.userStoragePath(owner)));
         } catch (IllegalArgumentException ex) {
-            System.out.println("Folder not found");
+            JavalinLogger.error("Folder not found", ex);
             return 0;
         }
     }
@@ -134,7 +116,6 @@ public class UserService {
 
     public static User byToken(String token) {
         try (Connection con = DBPool.getConnection().open()) {
-            System.out.println("try to find user by token:" + token);
             return con.createQuery(USER_BY_TOKEN_SQL).addParameter("token", token).executeAndFetchFirst(User.class);
         }
     }

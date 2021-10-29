@@ -1,5 +1,6 @@
 package edu.sumdu.tss.elephant.helper;
 
+import io.javalin.core.util.JavalinLogger;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -29,7 +30,7 @@ public class Keys {
 
     public static void loadParams(File properties) {
         Map<String, String> env = System.getenv();
-        keys = new HashMap<String, String>();
+        keys = new HashMap<>();
         try {
             var is = FileUtils.openInputStream(properties);
             var app_properties = new Properties();
@@ -46,7 +47,7 @@ public class Keys {
                 if (value == null) {
                     value = app_properties.getProperty(key);
                     if (value != null) {
-                        System.out.println(String.format("Property %s set in config file. It is insecure", key));
+                        JavalinLogger.warn(String.format("Property %s set in config file. It is insecure", key));
                     } else {
                         throw new IllegalArgumentException(String.format("Property %s not found in %s and or system environment (last - preferable)", key, properties.getPath()));
                     }
@@ -78,7 +79,4 @@ public class Keys {
         return Keys.get("ENV").equalsIgnoreCase("production");
     }
 
-    public enum FLASH_KEYS {
-        INFO, ERROR
-    }
 }

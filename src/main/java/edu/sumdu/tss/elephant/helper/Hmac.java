@@ -4,7 +4,6 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.security.SignatureException;
 import java.util.Formatter;
 
 public class Hmac {
@@ -19,7 +18,7 @@ public class Hmac {
     }
 
     public static String calculate(String data, String key)
-            throws SignatureException, NoSuchAlgorithmException, InvalidKeyException {
+            throws NoSuchAlgorithmException, InvalidKeyException {
         SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes(), HMAC_SHA384);
         Mac mac = Mac.getInstance(HMAC_SHA384);
         mac.init(secretKeySpec);

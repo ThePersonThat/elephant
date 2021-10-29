@@ -8,13 +8,11 @@ import edu.sumdu.tss.elephant.helper.exception.NotFoundException;
 import edu.sumdu.tss.elephant.helper.utils.ResponseUtils;
 import edu.sumdu.tss.elephant.model.*;
 import io.javalin.Javalin;
-import io.javalin.core.util.JavalinLogger;
 import io.javalin.http.Context;
 import io.javalin.plugin.openapi.annotations.*;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.security.SignatureException;
 
 //FIXME: no time nonce
 public final class ApiController extends AbstractController {
@@ -28,7 +26,6 @@ public final class ApiController extends AbstractController {
             description = "Create/Update restore point (backup) on database",
             operationId = "create_backup",
             summary = "Create/Update restore point (backup) on database",
-            deprecated = false,
             tags = {"backup"},
 
             // Parameters
@@ -51,21 +48,16 @@ public final class ApiController extends AbstractController {
 
     )
     public static void backup(final Context ctx) {
-        User currentUser;
         try {
-            currentUser = verifyRights(ctx);
+            var database = verifyRights(ctx);
+            var pointName = ctx.pathParam("point");
+            BackupService.perform(database.getOwner(), database.getName(), pointName);
         } catch (AccessRestrictedException ex) {
             ctx.json(ResponseUtils.error("Can't validate user"));
             return;
-        }
-
-        String dbName = ctx.pathParam("name");
-        String pointName = ctx.pathParam("point");
-        try {
-            Database database = DatabaseService.activeDatabase(currentUser.getUsername(), dbName);
-            BackupService.perform(currentUser.getUsername(), database.getName(), pointName);
-        } catch (AccessRestrictedException | BackupException | NotFoundException ex) {
+        } catch (BackupException | NotFoundException ex) {
             ctx.json(ResponseUtils.error("Backup error" + ex.getMessage()));
+            return;
         }
         ctx.status(204);
     }
@@ -77,45 +69,36 @@ public final class ApiController extends AbstractController {
             }
     )
     public static void restore(final Context ctx) {
-        User currentUser;
         try {
-            currentUser = verifyRights(ctx);
+            var database = verifyRights(ctx);
+            var pointName = ctx.pathParam("point");
+            BackupService.restore(database.getOwner(), database.getName(), pointName);
         } catch (AccessRestrictedException ex) {
             ctx.json(ResponseUtils.error("Can't validate user"));
             return;
-        }
-
-        String dbName = ctx.pathParam("name");
-        String pointName = ctx.pathParam("point");
-
-        try {
-            Database database = DatabaseService.activeDatabase(currentUser.getUsername(), dbName);
-            BackupService.restore(currentUser.getUsername(), database.getName(), pointName);
-        } catch (AccessRestrictedException | BackupException | NotFoundException ex) {
+        } catch (BackupException | NotFoundException ex) {
             ctx.json(ResponseUtils.error("Backup error" + ex.getMessage()));
             return;
         }
         ctx.status(204);
     }
 
-    private static User verifyRights(final Context ctx) throws AccessRestrictedException {
-        JavalinLogger.info("Verify rights:");
-        JavalinLogger.info(ctx.header("publickey"));
-        JavalinLogger.info(ctx.header("signature"));
-        JavalinLogger.info(ctx.headerMap().toString());
+    private static Database verifyRights(final Context ctx) throws AccessRestrictedException {
         String publicKey = ctx.header("publickey");
         String hmac = ctx.header("signature");
         User user = UserService.byPublicKey(publicKey);
         String path = ctx.path();
         try {
             String checkedHmac = Hmac.calculate(path, user.getPrivateKey());
-            if (hmac.equals(checkedHmac)) {
+            if (hmac == null || !hmac.equals(checkedHmac)) {
                 throw new AccessRestrictedException("Invalid sign");
             }
-        } catch (SignatureException | NoSuchAlgorithmException | InvalidKeyException ex) {
+        } catch (NoSuchAlgorithmException | InvalidKeyException ex) {
             throw new AccessRestrictedException(ex);
         }
-        return user;
+
+        String dbName = ctx.pathParam("name");
+        return DatabaseService.activeDatabase(user.getUsername(), dbName);
     }
 
     public void register(final Javalin app) {

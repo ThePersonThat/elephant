@@ -3,11 +3,9 @@ package edu.sumdu.tss.elephant.controller;
 import edu.sumdu.tss.elephant.helper.DBPool;
 import edu.sumdu.tss.elephant.helper.UserRole;
 import edu.sumdu.tss.elephant.helper.ViewHelper;
-import edu.sumdu.tss.elephant.helper.utils.ParameterizedStringFactory;
 import edu.sumdu.tss.elephant.model.Database;
 import edu.sumdu.tss.elephant.model.DatabaseService;
 import io.javalin.Javalin;
-import io.javalin.core.util.JavalinLogger;
 import io.javalin.http.Context;
 
 import java.sql.*;
@@ -15,14 +13,12 @@ import java.sql.*;
 public class SqlController extends AbstractController {
 
     public static final String BASIC_PAGE = "/database/{database}/sql";
-    private static final ParameterizedStringFactory DEFAULT_CRUMB = new ParameterizedStringFactory("<a href='/database/:database/sql'>SQL Console</a>");
 
     public SqlController(Javalin app) {
         super(app);
     }
 
     private static void show(Context context) {
-        Database database = currentDB(context);
         var model = currentModel(context);
         model.put("query", context.sessionAttribute("query"));
         context.sessionAttribute("query", null);
@@ -32,12 +28,13 @@ public class SqlController extends AbstractController {
 
     private static void run(Context context) {
         String query = context.formParam("query");
-        JavalinLogger.info(query);
+
         StringBuilder builder = new StringBuilder(500);
-        builder.append("<pre class='query'>" + query + "</pre>");
-        if (query.isBlank()) {
-            context.result(builder.toString());
+        if (query == null || query.isBlank()) {
+            context.result("<pre class='query'></pre>");
             return;
+        } else {
+            builder.append("<pre class='query'>").append(query).append("</pre>");
         }
 
         context.sessionAttribute("query", query);
@@ -61,7 +58,7 @@ public class SqlController extends AbstractController {
                     builder.append("<div class='datagrid'><table><thead><tr>");
                     builder.append("<th>&nbsp;#&nbsp;</th>");
                     for (int i = 1; i < columnLabels.length + 1; i++) {
-                        builder.append("<th>" + rsmd.getColumnLabel(i) + "</th>");
+                        builder.append("<th>").append(rsmd.getColumnLabel(i)).append("</th>");
                         columnLabels[i - 1] = rsmd.getColumnLabel(i);
                     }
                     builder.append("</tr><tbody>");
@@ -71,13 +68,12 @@ public class SqlController extends AbstractController {
                         String alt = rn % 2 == 0 ? "<tr class='alt'>" : "<tr>";
 
                         builder.append(alt);
-                        builder.append("<td>" + rn++ + "</td>");
-                        for (int i = 0; i < columnLabels.length; i++)
-                            builder.append("<td>" + rs.getString(columnLabels[i]) + "</td>");
+                        builder.append("<td>").append(rn++).append("</td>");
+                        for (String columnLabel : columnLabels)
+                            builder.append("<td>").append(rs.getString(columnLabel)).append("</td>");
                         builder.append("</tr>");
                         if (rn > 300) {
-                            builder.append("<tr><td colspan=" + columnLabels.length +
-                                    "><strong style='color: red;'>300+ (extra rows omitted)</strong></td></tr>");
+                            builder.append("<tr><td colspan=\"").append(columnLabels.length).append("\"><strong style='color: red;'>300+ (extra rows omitted)</strong></td></tr>");
                             break;
                         }
                     }
@@ -87,13 +83,13 @@ public class SqlController extends AbstractController {
                     if (!st.isClosed()) { // thorw error on closed statement
                         int updated = st.getUpdateCount();
                         if (updated > 0) {// -1 Stands for DDL
-                            builder.append(" Changed: " + st.getUpdateCount());
+                            builder.append(" Changed: ").append(st.getUpdateCount());
                         }
                     }
                 }
                 SQLWarning warning = conn.getWarnings();
                 while (warning != null) {
-                    builder.append("[SQL WARNING] " + warning);
+                    builder.append("[SQL WARNING] ").append(warning);
                     warning = warning.getNextWarning();
                 }
                 conn.clearWarnings();
