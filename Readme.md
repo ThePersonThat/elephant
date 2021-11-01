@@ -86,6 +86,17 @@ DEFAULT_LANG=EN
 ENV=PRODUCTION
 ```
 
+### Create database
+
+Before start you must create database %DB.NAME% owned to %DB.USERNAME% and seed it by migrations SQL.
+
+Substitute %KEY% with it's real value.
+
+```
+psql -p %DB.PORT% -h %DB.HOST% -U %DB.USERNAME% -c "create database %DB.NAME% owner %DB.USERNAME%;"
+psql -p %DB.PORT% -h %DB.HOST% -U %DB.USERNAME% -d %DB.NAME% < src/main/resources/migrations/*.sql
+```
+
 ### Linux
 
 For linux distribution you must allow do `sudo chwon` without password for owner of Elephant process.
