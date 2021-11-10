@@ -2,6 +2,9 @@
 
 See full documentation and requirements at https://confluence.elearning.sumdu.edu.ua/x/GQAM
 
+## Note
+All tests are on the testing branch
+
 ## Prerequisites
 
 Project is written on Java 16 (17 work to). Project requires maven (bundled with Intelj Idea or standalone), PostgreSQL
