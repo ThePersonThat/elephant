@@ -1,56 +1,111 @@
 package edu.sumdu.tss.elephant.model;
 
 import edu.sumdu.tss.elephant.helper.DBPool;
-import edu.sumdu.tss.elephant.helper.utils.StringUtils;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import edu.sumdu.tss.elephant.helper.Keys;
+import edu.sumdu.tss.elephant.helper.utils.CmdUtil;
+import edu.sumdu.tss.elephant.helper.utils.ParameterizedStringFactory;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.sql2o.Connection;
+import org.sql2o.Query;
+import org.sql2o.Sql2o;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 
-class DbUserServiceTest {
+@ExtendWith(MockitoExtension.class)
+public class DbUserServiceTest {
+    @Mock
+    Sql2o sql2o;
+    @Mock
+    Connection connection;
+    @Mock
+    Query query;
 
-    private static final String FIND_USER = "SELECT count(1) FROM pg_catalog.pg_user where usename = :username";
-    private static final String FIND_SPACE = "SELECT count(1) FROM pg_catalog.pg_tablespace where spcname = :username;";
-    private static final String FIND_DB = "SELECT count(1) from pg_catalog.pg_database join pg_authid on pg_database.datdba = pg_authid.oid  where rolname = :username;";
+    private static final ParameterizedStringFactory RESET_USER_SQL = new ParameterizedStringFactory("ALTER USER :name WITH PASSWORD ':password'");
+    private static final ParameterizedStringFactory CREATE_USER_SQL = new ParameterizedStringFactory("CREATE USER :name WITH PASSWORD ':password' CONNECTION LIMIT 5 IN ROLE customer;");
+    private static final ParameterizedStringFactory DELETE_USER_SQL = new ParameterizedStringFactory("DROP USER :name");
 
-    Connection con;
+    @Test
+    @DisplayName("Should reset DB user password")
+    public void testShouldResetDbUserPassword() {
+        String username = "test_user";
+        String newPassword = "new_12345";
+        String querySQL = RESET_USER_SQL.addParameter("name", username).addParameter("password", newPassword).toString();
 
-    @BeforeEach
-    void setUp() {
-        con = DBPool.getConnection().open();
-    }
+        try (MockedStatic<Keys> mockedKeys = mockStatic(Keys.class)) {
+            mockedKeys.when(() -> Keys.get(anyString())).thenReturn("testName");
+            try (MockedStatic<DBPool> mockedPool = mockStatic(DBPool.class)) {
+                mockedPool.when(DBPool::getConnection).thenReturn(sql2o);
+                when(sql2o.open()).thenReturn(connection);
+                when(connection.createQuery(anyString(), anyBoolean())).thenReturn(query);
+                when(query.executeUpdate()).thenReturn(connection);
 
-    @AfterEach
-    void tearDown() {
-        con.close();
+                DbUserService.dbUserPasswordReset(username, newPassword);
+
+                mockedPool.verify(DBPool::getConnection);
+                verify(connection).createQuery(eq(querySQL), eq(false));
+                verify(query).executeUpdate();
+
+            }
+
+        }
     }
 
     @Test
-    void initUser() {
-        String password = "test";
-        User user = UserService.newDefaultUser();
-        user.setLogin(StringUtils.randomAlphaString(8) + "@example.com");
-        user.setPassword(password);
-        UserService.save(user);
+    @DisplayName("Should drop user")
+    public void testShouldDropUser() {
+        String name = "test_user";
+        String testPath = "test_path";
+        String expectedPath = String.format("sudo remove-user %s",  testPath);
 
-        String username = user.getUsername();
+        try (MockedStatic<Keys> mockedKeys = mockStatic(Keys.class)) {
+            mockedKeys.when(() -> Keys.get(anyString())).thenReturn("testName");
+            try (MockedStatic<DBPool> mockedPool = mockStatic(DBPool.class);
+                 MockedStatic<UserService> mockedUserService = mockStatic(UserService.class);
+                 MockedStatic<CmdUtil> mockedCmdUtil = mockStatic(CmdUtil.class)) {
+                mockedPool.when(DBPool::getConnection).thenReturn(sql2o);
+                when(sql2o.beginTransaction()).thenReturn(connection);
+                when(connection.createQuery(anyString(), anyBoolean())).thenReturn(query);
+                when(query.executeUpdate()).thenReturn(connection);
+                mockedUserService.when(() -> UserService.userStoragePath(anyString())).thenReturn(testPath);
+                DbUserService.dropUser(name);
 
-        DbUserService.initUser(username, password);
-        int user_count = con.createQuery(FIND_USER).addParameter("username", username).executeScalar(Integer.class);
-        int ts_count = con.createQuery(FIND_SPACE).addParameter("username", username).executeScalar(Integer.class);
-        int db_count = con.createQuery(FIND_DB).addParameter("username", username).executeScalar(Integer.class);
-        assertEquals(1, user_count, "User created");
-        assertEquals(1, ts_count, "tablespace created");
-        assertEquals(1, db_count, "database");
+                mockedPool.verify(DBPool::getConnection);
+                verify(connection).createQuery(eq(DELETE_USER_SQL.addParameter("name", name).toString()), eq(false));
+                verify(query).executeUpdate();
+                mockedCmdUtil.verify(() -> CmdUtil.exec(eq(expectedPath)));
+            }
+        }
     }
 
     @Test
-    void dbUserPasswordReset() {
+    @DisplayName("Should init user")
+    public void testShouldInitUser() {
+        String name = "test_user";
+        String password = "test_password";
+
+        try (MockedStatic<Keys> mockedKeys = mockStatic(Keys.class)) {
+            mockedKeys.when(() -> Keys.get(anyString())).thenReturn("testName");
+            try (MockedStatic<DBPool> mockedPool = mockStatic(DBPool.class)) {
+                mockedPool.when(DBPool::getConnection).thenReturn(sql2o);
+                when(sql2o.open()).thenReturn(connection);
+                when(connection.createQuery(anyString(), anyBoolean())).thenReturn(query);
+                when(query.executeUpdate()).thenReturn(connection);
+
+                DbUserService.initUser(name, password);
+
+                mockedPool.verify(DBPool::getConnection);
+                verify(connection).createQuery(eq(CREATE_USER_SQL.addParameter("name", name).addParameter("password", password).toString()), eq(false));
+                verify(query).executeUpdate();
+            }
+        }
     }
 
-    @Test
-    void dropUser() {
-    }
+
 }

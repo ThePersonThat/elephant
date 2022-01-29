@@ -2,3 +2,5 @@
 /.idea/
 /elephant.iml
 config.properties
+*.test
+startup.sh

@@ -5,6 +5,27 @@ See full documentation and requirements at https://confluence.elearning.sumdu.ed
 ## Note
 All tests are on the testing branch
 
+## How to run tests (Instruction)
+The first step you need is to write config with valid settings (you can see all the properties below in the readme file).
+If you use Windows you need to add the **your_path_to_postgres/bin** folder as path variable, if you don't do it 
+tests that works with **pg_dump** and **pg_restore** will fail and won't cover the code. When you run the integration 
+tests you may get the error described after this section. To run e2e you need the following browsers: firefox, edge, chrome.
+To run all the tests (unit, integrations and e2e with 3 browsers and with different resolutions) you need to run 
+**run_test.sh** using bash (e.g. git bash or different terminal or program that can execute bash script), also you need 
+**maven** for this. The e2e runs with chrome and fullscreen resolution by default (if any browser is not settled).
+I don't know why but Idea shows different count lines of code in Linux and Windows. The report was written based 
+on code coverage in Linux.
+#### Linux 
+![img.png](images/linux.png)
+#### Windows
+![img.png](images/windows.png)
+
+## Intellij idea problem with integration tests
+If you want to run all tests with coverage you will get an ExceptionInInitializerError in the AccessManager class 
+on [this line](https://github.com/ThePersonThat/elephant/blob/11f29efff526e5bdfcb0eb1732ab88638d80896c/src/main/java/edu/sumdu/tss/elephant/middleware/CustomAccessManager.java#L27).
+You can fix it by going through all the steps in the answer here:
+https://youtrack.jetbrains.com/issue/IDEA-274803
+
 ## Prerequisites
 
 Project is written on Java 16 (17 work to). Project requires maven (bundled with Intelj Idea or standalone), PostgreSQL
@@ -26,7 +47,7 @@ For local development add to `pg_hba.conf` :
     # IPv4 local connections:
     host    all             all             127.0.0.1/32            scram-sha-256
 
-For local server add to `pg_hba.conf` :
+For public server add to `pg_hba.conf` :
 
     # IPv4 local connections:
     host    all             all             0.0.0.0/0            scram-sha-256
@@ -38,6 +59,8 @@ and to `postgresql.conf` change
 to
 
     listen_addresses = '*'
+
+3. Check postgresql bin folder in your classpath (e.i. yore able to start pg_dump / pg_restore without specifying its directory)
 
 ### Config file
 
@@ -61,6 +84,7 @@ environment variables.
 |EMAIL.USER|SMTP user|
 |EMAIL.PASSWORD|SMPT user password |
 |EMAIL.FROM|Value for "mail from" field (mostly same as EMAIL.USER )|
+|EMAIL.SSL| true/false - use or not ssl on connection to SMTP server|
 |DEFAULT_LANG| EN or UK|
 |ENV| PRODUCTION or other . In PRODUCTION mode error page does not show stack traces |
 
@@ -91,9 +115,9 @@ ENV=PRODUCTION
 
 ### Create database
 
-Before start you must create database %DB.NAME% owned to %DB.USERNAME% and seed it by migrations SQL.
+Before start, you must create database %DB.NAME% owned to %DB.USERNAME% and seed it by migrations SQL.
 
-Substitute %KEY% with it's real value.
+Substitute %KEY% with its real value.
 
 ```
 psql -p %DB.PORT% -h %DB.HOST% -U %DB.USERNAME% -c "create database %DB.NAME% owner %DB.USERNAME%;"

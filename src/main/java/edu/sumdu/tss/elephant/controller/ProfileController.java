@@ -31,7 +31,7 @@ public class ProfileController extends AbstractController {
         context.redirect(BASIC_PAGE);
     }
 
-    private static void resetDbPassword(Context context) {
+    public static void resetDbPassword(Context context) {
         User user = currentUser(context);
         //TODO add password validation
         JavalinLogger.info(user.toString());
@@ -43,16 +43,16 @@ public class ProfileController extends AbstractController {
         context.redirect(BASIC_PAGE);
     }
 
-    private static void resetWebPassword(Context context) {
+    public static void resetWebPassword(Context context) {
         User user = currentUser(context);
         //TODO add password validation
-        user.setPassword(context.formParam("web-password"));
+        user.password(context.formParam("web-password"));
         UserService.save(user);
         context.sessionAttribute(Keys.INFO_KEY, "Web user password was changed");
         context.redirect(BASIC_PAGE);
     }
 
-    private static void resetApiPassword(Context context) {
+    public static void resetApiPassword(Context context) {
         User user = currentUser(context);
         //TODO add password validation
         user.setPrivateKey(StringUtils.randomAlphaString(20));
@@ -62,7 +62,7 @@ public class ProfileController extends AbstractController {
         context.redirect(BASIC_PAGE);
     }
 
-    private static void upgradeUser(Context context) {
+    public static void upgradeUser(Context context) {
         User user = currentUser(context);
         user.setRole(UserRole.valueOf(context.formParam("role")).getValue());
         UserService.save(user);
@@ -70,7 +70,7 @@ public class ProfileController extends AbstractController {
         context.redirect(BASIC_PAGE);
     }
 
-    private static void removeSelf(Context context) {
+    public static void removeSelf(Context context) {
         User user = currentUser(context);
         DbUserService.dropUser(user.getUsername());
         //TODO: delete all user-specific files
