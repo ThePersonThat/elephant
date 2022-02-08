@@ -56,6 +56,8 @@ validation:
     not_found: Користувач або пароль не відомі
     not_found_token: Невідомий або недійсний маркер
     not_uniq: Ця  пошта вже використовуєтсья.
+  script:
+      wrong_extension: "Неправильне розширення файлу. Повинно бути .sql"
 dashboard:
   dashboard:
     title: Головна

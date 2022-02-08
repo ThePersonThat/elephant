@@ -56,6 +56,8 @@ validation:
     not_found: "User or password not known"
     not_found_token: "Unknown or invalid token"
     not_uniq: "The user with such email address has been already registered. Please fill out another email address"
+  script:
+    wrong_extension: "Wrong extension. Must be .sql"
 dashboard:
   dashboard:
     title: "Dashboard"
