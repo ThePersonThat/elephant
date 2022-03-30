@@ -72,8 +72,8 @@ public class SqlController extends AbstractController {
                         for (String columnLabel : columnLabels)
                             builder.append("<td>").append(rs.getString(columnLabel)).append("</td>");
                         builder.append("</tr>");
-                        if (rn > 300) {
-                            builder.append("<tr><td colspan=\"").append(columnLabels.length).append("\"><strong style='color: red;'>300+ (extra rows omitted)</strong></td></tr>");
+                        if (rn > 500) {
+                            builder.append("<tr><td colspan=\"").append(columnLabels.length).append("\"><strong style='color: red;'>500+ (extra rows limited)</strong></td></tr>");
                             break;
                         }
                     }
